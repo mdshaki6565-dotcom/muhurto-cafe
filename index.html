@@ -809,14 +809,33 @@ async function saveMenuData() {
                 'Content-Type': 'application/json',
                 'X-Master-Key': API_KEY
             },
-            body: JSON.stringify({ menu: menuData })
+                        body: JSON.stringify({ menu: menuData })
         });
     } catch (error) {
         console.error("ক্লাউডে সেভ করতে সমস্যা হয়েছে:", error);
     }
 }
+
+// ওয়েবসাইট লোড হলেই ক্লাউড থেকে মেনু ডাটা নিয়ে আসার ফাংশন
+async function loadMenuData() {
+    try {
+        const response = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
+        const res = await fetch(response, {
+            headers: { 'X-Master-Key': API_KEY }
+        });
+        const data = await res.json();
+        if (data.record && data.record.menu) {
+            menuData = data.record.menu;
+            if (typeof renderCategories === 'function') renderCategories();
+            if (typeof renderMenu === 'function') renderMenu();
+        }
+    } catch (error) {
+        console.error("ক্লাউড থেকে ডাটা লোড করতে সমস্যা হয়েছে:", error);
+    }
+}
+
+// পেজ ওপেন হওয়ার সাথে সাথে ক্লাউড ডাটা লোড হবে
+window.addEventListener('DOMContentLoaded', loadMenuData);
 </script>
 </body>
 </html>
-
-
