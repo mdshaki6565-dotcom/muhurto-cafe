@@ -797,6 +797,26 @@
         renderTableOptions();
         renderCategories();
         renderMenu();
-    </script>
+        // মুহূর্ত Cafe - ক্লাউড সিঙ্ক কনফিগারেশন
+const BIN_ID = '6ad61d97ffd5d1605378d224';
+const API_KEY = '$2a$10$dqSR9ocLraNLKmig9LGam.zAL3xU1VkOoQAeqjEbSNDEpBSHLeCe6';
+
+async function saveMenuData() {
+    try {
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': API_KEY
+            },
+            body: JSON.stringify({ menu: menuData })
+        });
+    } catch (error) {
+        console.error("ক্লাউডে সেভ করতে সমস্যা হয়েছে:", error);
+    }
+}
+</script>
 </body>
 </html>
+
+
