@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="site-title-tag">মুহূর্ত Cafe</title>
+    <style>
+        :root {
+            --primary-color: #1b3b2b;
+            --accent-color: #d4a373;
+            --bg-color: #f4f1de;
+            --card-bg: #ffffff;
+            --text-color: #2b2b2b;
+            --wa-color: #25D366;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: 40px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 22px;
+            margin-bottom: 2px;
+        }
+
+        header p {
+            font-size: 12px;
+            opacity: 0.85;
+        }
+
+        .admin-btn {
+            position: absolute;
+            right: 12px;
+            top: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .sticky-top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: #ffffff;
+            border-bottom: 2px solid var(--primary-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 10px 15px;
+        }
+
+        .order-action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-select {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .table-select select {
+            padding: 5px 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .direct-order-btn {
+            background: var(--wa-color);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .compact-summary {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .summary-items {
+            margin-top: 6px;
+            max-height: 100px;
+            overflow-y: auto;
+            border-top: 1px dashed #ddd;
+            padding-top: 6px;
+        }
+
+        .summary-item-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            color: #444;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .categories {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+
+        .category-btn {
+            background: var(--card-bg);
+            border: 1px solid #ddd;
+            padding: 6px 14px;
+            border-radius: 18px;
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .category-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .menu-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .menu-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .menu-card img {
+            width: 65px;
+            height: 65px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .menu-info {
+            flex-grow: 1;
+        }
+
+        .menu-info h3 {
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+
+        .menu-info p {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .menu-info .price {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 13px;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .qty-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 100000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 18px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-content input, .modal-content select {
+            width: 100%;
+            padding: 9px;
+            margin: 6px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .btn-cancel {
+            background: #777;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .btn-save {
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .action-btn-sm {
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            margin-right: 4px;
+            font-weight: bold;
+        }
+
+        .btn-edit { background: #3498db; color: white; }
+        .btn-del { background: #e74c3c; color: white; }
+
+        .admin-section {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #e9ecef;
+        }
+
+        .admin-section h4 {
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: var(--primary-color);
+        }
+
+        .admin-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 6px 8px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            border: 1px solid #ddd;
+            font-size: 12px;
+        }
+
+        .image-preview {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            object-fit: cover;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 id="site-name-display">মুহূর্ত Cafe</h1>
+        <p id="site-address-display">গোকুলনগর বাসস্ট্যান্ড, বেলাব, নরসিংদী</p>
+        <button class="admin-btn" onclick="openAdminModal()">🔒 এডমিন</button>
+    </header>
+
+    <div class="sticky-top-bar">
+        <div class="order-action-row">
+            <div class="table-select">
+                <label for="table-num">টেবিল:</label>
+                <select id="table-num"></select>
+            </div>
+            <button class="direct-order-btn" onclick="sendOrder()">হোয়াটসঅ্যাপে পাঠান 📲</button>
+        </div>
+
+        <div class="compact-summary" id="summary-box">
+            <div class="summary-header" onclick="toggleSummaryList()">
+                <span>মোট বিল: <strong style="color: var(--primary-color);" id="total-price">৳ 0</strong></span>
+                <span id="summary-toggle-icon" style="font-size: 10px; color: #666;">▼ তালিকা দেখুন</span>
+            </div>
+            <div class="summary-items" id="summary-items-list" style="display: none;">
+                <div style="color: #888; text-align: center;">কোনো খাবার নির্বাচন করা হয়নি</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="categories" id="category-list"></div>
+        <div class="menu-grid" id="menu-grid"></div>
+    </div>
+
+    <!-- গোপন এডমিন পিন লগইন মোডাল -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <h3>🔒 এডমিন পিন পাসওয়ার্ড</h3>
+            <p style="font-size: 11px; color: #666; margin-bottom: 8px;">গোপন পিন কোড প্রবেশ করান:</p>
+            <input type="password" id="admin-pin-input" placeholder="****">
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal('login-modal')">বাতিল</button>
+                <button class="btn-save" onclick="checkPin()">লগইন</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- এডমিন ড্যাশবোর্ড মোডাল -->
+    <div class="modal" id="admin-modal">
+        <div class="modal-content">
+            <h3>⚙️ এডমিন কন্ট্রোল প্যানেল</h3>
+            <hr style="margin: 8px 0;">
+
+            <!-- নাম ও ঠিকানা -->
+            <div class="admin-section">
+                <h4>🏪 ক্যাফের নাম ও ঠিকানা</h4>
+                <input type="text" id="admin-cafe-name" placeholder="ক্যাফের নাম">
+                <input type="text" id="admin-cafe-address" placeholder="ক্যাফের ঠিকানা">
+                <button class="btn-save" style="width: 100%; margin-top: 4px;" onclick="saveCafeDetails()">সেভ করুন</button>
+            </div>
+
+            <!-- টেবিল তালিকা -->
+            <div class="admin-section">
+                <h4>🪑 টেবিল নম্বরসমূহ (কমা দিয়ে লিখুন)</h4>
+                <input type="text" id="admin-tables-input" placeholder="১, ২, ৩, ৪, ৫, ৬">
+                <button class="btn-save" style="width: 100%; margin-top: 4px;" onclick="saveTables()">টেবিল সেভ করুন</button>
+            </div>
+
+            <!-- হোয়াটসঅ্যাপ নম্বর -->
+            <div class="admin-section" style="background: #e8f5e9; border-color: #c8e6c9;">
+                <h4 style="color: #2e7d32;">📱 হোয়াটসঅ্যাপ নম্বর</h4>
+                <input type="text" id="phone-input" placeholder="8801789905965">
+                <button class="btn-save" style="width: 100%; margin-top: 4px; background: #2e7d32;" onclick="changePhone()">নম্বর সেভ করুন</button>
+            </div>
+
+            <!-- নতুন খাবার এবং গ্যালারি থেকে ছবি আপলোড -->
+            <div class="admin-section">
+                <h4 id="form-title">🍔 নতুন খাবার যুক্ত / এডিট</h4>
+                <input type="hidden" id="edit-item-id" value="">
+                <input type="text" id="item-name" placeholder="খাবারের নাম">
+                <input type="number" id="item-price" placeholder="মূল্য (টাকা)">
+                <select id="item-cat">
+                    <option value="চা ও গরম পানীয়">চা ও গরম পানীয়</option>
+                    <option value="ফাস্ট ফুড">ফাস্ট ফুড</option>
+                    <option value="ফুচকা ও চাট">ফুচকা ও চাট</option>
+                    <option value="ফ্রেশ জুস">ফ্রেশ জুস</option>
+                    <option value="হালকা খাবার">হালকা খাবার</option>
+                </select>
+
+                <label style="font-size: 11px; font-weight: bold; margin-top: 6px; display: block;">🖼️ গ্যালারি থেকে ছবি বেছে নিন:</label>
+                <input type="file" id="item-img-file" accept="image/*" onchange="previewImage(event)">
+                <input type="hidden" id="item-img-base64" value="">
+                <img id="img-preview" class="image-preview" alt="Preview">
+
+                <button class="btn-save" id="save-item-btn" style="width: 100%; margin-top: 8px;" onclick="saveMenuItem()">খাবার সংরক্ষণ করুন</button>
+                <button class="btn-cancel" id="cancel-edit-btn" style="width: 100%; margin-top: 4px; display:none;" onclick="resetItemForm()">এডিট বাতিল করুন</button>
+            </div>
+
+            <!-- খাবারের তালিকা -->
+            <div class="admin-section">
+                <h4>📋 খাবারের তালিকা (এডিট / ডিলিট)</h4>
+                <div id="admin-menu-list"></div>
+            </div>
+
+            <!-- সিকিউরিটি পিন পরিবর্তন -->
+            <div class="admin-section">
+                <h4>🔑 পিন পাসওয়ার্ড পরিবর্তন</h4>
+                <input type="password" id="new-pin-input" placeholder="নতুন ৪ ডিজিটের পিন">
+                <button class="btn-save" style="width: 100%; margin-top: 4px;" onclick="changePin()">পিন পরিবর্তন করুন</button>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-cancel" style="width: 100%;" onclick="closeModal('admin-modal')">বন্ধ করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cafeName = localStorage.getItem('muhurto_name') || "মুহূর্ত Cafe";
+        let cafeAddress = localStorage.getItem('muhurto_address') || "গোকুলনগর বাসস্ট্যান্ড, বেলাব, নরসিংদী";
+        let phone = localStorage.getItem('muhurto_phone') || "8801789905965";
+        let tableList = JSON.parse(localStorage.getItem('muhurto_tables')) || ["১", "২", "৩", "৪", "৫", "৬"];
+        let adminPin = localStorage.getItem('muhurto_pin') || "1234";
+
+        let defaultMenu = [
+            { id: 1, name: "স্পেশাল কুলফি চা", category: "চা ও গরম পানীয়", price: 40, img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=150", desc: "স্পেশাল মসলা ও কুলফি স্বাদের চা" },
+            { id: 2, name: "চিকেন বার্গার", category: "ফাস্ট ফুড", price: 120, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=150", desc: "জুসি চিকেন প্যাটি ও স্পেশাল সস" }
+        ];
+
+        let menuData = JSON.parse(localStorage.getItem('muhurto_menu')) || defaultMenu;
+        let cart = {};
+        let currentCategory = 'সব';
+        let isSummaryOpen = false;
+
+        function updateSiteHeader() {
+            document.getElementById('site-name-display').innerText = cafeName;
+            document.getElementById('site-title-tag').innerText = cafeName;
+            document.getElementById('site-address-display').innerText = cafeAddress;
+        }
+
+        function renderTableOptions() {
+            const tableSelect = document.getElementById('table-num');
+            tableSelect.innerHTML = tableList.map(t => `<option value="${t}">টেবিল ${t}</option>`).join('');
+        }
+
+        function saveMenuData() {
+            localStorage.setItem('muhurto_menu', JSON.stringify(menuData));
+        }
+
+        function renderCategories() {
+            const categories = ['সব', ...new Set(menuData.map(item => item.category))];
+            const catContainer = document.getElementById('category-list');
+            catContainer.innerHTML = categories.map(cat => 
+                `<button class="category-btn ${cat === currentCategory ? 'active' : ''}" onclick="filterCategory('${cat}')">${cat}</button>`
+            ).join('');
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            renderCategories();
+            renderMenu();
+        }
+
+        function renderMenu() {
+            const grid = document.getElementById('menu-grid');
+            const filteredData = currentCategory === 'সব' 
+                ? menuData 
+                : menuData.filter(item => item.category === currentCategory);
+
+            grid.innerHTML = filteredData.map(item => {
+                let qty = cart[item.id] || 0;
+                return `
+                <div class="menu-card">
+                    <img src="${item.img}" alt="${item.name}">
+                    <div class="menu-info">
+                        <h3>${item.name}</h3>
+                        <p>${item.desc || ''}</p>
+                        <div class="price">৳ ${item.price}</div>
+                    </div>
+                    <div class="quantity-controls">
+                        ${qty > 0 ? `<button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>` : ''}
+                        ${qty > 0 ? `<span style="font-weight:bold; font-size:13px;">${qty}</span>` : ''}
+                        <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function changeQty(id, change) {
+            cart[id] = (cart[id] || 0) + change;
+            if (cart[id] <= 0) delete cart[id];
+            updateCartUI();
+            renderMenu();
+        }
+
+        function updateCartUI() {
+            let total = 0;
+            let itemsHTML = "";
+            let hasItems = false;
+
+            for (let id in cart) {
+                if (cart[id] > 0) {
+                    let item = menuData.find(i => i.id == id);
+                    if(item) {
+                        hasItems = true;
+                        let subtotal = item.price * cart[id];
+                        total += subtotal;
+                        itemsHTML += `
+                            <div class="summary-item-row">
+                                <span>${item.name} (x${cart[id]})</span>
+                                <strong>৳${subtotal}</strong>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            document.getElementById('total-price').innerText = `৳ ${total}`;
+            const summaryList = document.getElementById('summary-items-list');
+            if (hasItems) {
+                summaryList.innerHTML = itemsHTML;
+            } else {
+                summaryList.innerHTML = `<div style="color: #888; text-align: center;">কোনো খাবার নির্বাচন করা হয়নি</div>`;
+            }
+        }
+
+        function toggleSummaryList() {
+            isSummaryOpen = !isSummaryOpen;
+            const summaryList = document.getElementById('summary-items-list');
+            const toggleIcon = document.getElementById('summary-toggle-icon');
+            
+            if (isSummaryOpen) {
+                summaryList.style.display = 'block';
+                toggleIcon.innerText = '▲ বন্ধ করুন';
+            } else {
+                summaryList.style.display = 'none';
+                toggleIcon.innerText = '▼ তালিকা দেখুন';
+            }
+        }
+
+        function sendOrder() {
+            const table = document.getElementById('table-num').value;
+            let orderText = `*নতুন অর্ডার - ${cafeName}*%0A`;
+            orderText += `*টেবিল নম্বর:* ${table}%0A--------------------------%0A`;
+            
+            let total = 0;
+            let hasItems = false;
+
+            for (let id in cart) {
+                if (cart[id] > 0) {
+                    let item = menuData.find(i => i.id == id);
+                    if(item) {
+                        let subtotal = item.price * cart[id];
+                        total += subtotal;
+                        orderText += `• ${item.name} x ${cart[id]} = ৳${subtotal}%0A`;
+                        hasItems = true;
+                    }
+                }
+            }
+
+            if (!hasItems) {
+                alert('অনুগ্রহ করে অন্তত একটি খাবার নির্বাচন করুন!');
+                return;
+            }
+
+            orderText += `--------------------------%0A*সর্বমোট:* ৳${total}`;
+            window.open(`https://wa.me/${phone}?text=${orderText}`, '_blank');
+        }
+
+        function openAdminModal() {
+            document.getElementById('login-modal').style.display = 'flex';
+            document.getElementById('admin-pin-input').value = '';
+        }
+
+        function checkPin() {
+            const inputPin = document.getElementById('admin-pin-input').value;
+            if (inputPin === adminPin) {
+                closeModal('login-modal');
+                document.getElementById('admin-modal').style.display = 'flex';
+                
+                document.getElementById('admin-cafe-name').value = cafeName;
+                document.getElementById('admin-cafe-address').value = cafeAddress;
+                document.getElementById('admin-tables-input').value = tableList.join(', ');
+                document.getElementById('phone-input').value = phone;
+                
+                renderAdminMenuList();
+            } else {
+                alert('ভুল পিন পাসওয়ার্ড!');
+            }
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('item-img-base64').value = e.target.result;
+                    const preview = document.getElementById('img-preview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveCafeDetails() {
+            const name = document.getElementById('admin-cafe-name').value.trim();
+            const address = document.getElementById('admin-cafe-address').value.trim();
+            
+            if (name && address) {
+                cafeName = name;
+                cafeAddress = address;
+                localStorage.setItem('muhurto_name', name);
+                localStorage.setItem('muhurto_address', address);
+                updateSiteHeader();
+                alert('ক্যাফের নাম ও ঠিকানা সেভ হয়েছে!');
+            }
+        }
+
+        function saveTables() {
+            const input = document.getElementById('admin-tables-input').value.trim();
+            if (input) {
+                const arr = input.split(',').map(t => t.trim()).filter(t => t.length > 0);
+                if (arr.length > 0) {
+                    tableList = arr;
+                    localStorage.setItem('muhurto_tables', JSON.stringify(arr));
+                    renderTableOptions();
+                    alert('টেবিল তালিকা সেভ হয়েছে!');
+                }
+            }
+        }
+
+        function changePhone() {
+            const newPhone = document.getElementById('phone-input').value.trim();
+            if (newPhone.length >= 10) {
+                phone = newPhone;
+                localStorage.setItem('muhurto_phone', newPhone);
+                alert('হোয়াটসঅ্যাপ নম্বর সেভ হয়েছে!');
+            } else {
+                alert('সঠিক নম্বর দিন!');
+            }
+        }
+
+        function changePin() {
+            const newPin = document.getElementById('new-pin-input').value.trim();
+            if (newPin.length >= 4) {
+                adminPin = newPin;
+                localStorage.setItem('muhurto_pin', newPin);
+                alert('পিন পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে!');
+                document.getElementById('new-pin-input').value = '';
+            } else {
+                alert('অন্তত ৪ ডিজিটের নতুন পিন দিন!');
+            }
+        }
+
+        function renderAdminMenuList() {
+            const adminListContainer = document.getElementById('admin-menu-list');
+            adminListContainer.innerHTML = menuData.map(item => `
+                <div class="admin-item-row">
+                    <div>
+                        <strong>${item.name}</strong> - ৳${item.price}
+                    </div>
+                    <div>
+                        <button class="action-btn-sm btn-edit" onclick="editMenuItem(${item.id})">এডিট</button>
+                        <button class="action-btn-sm btn-del" onclick="deleteMenuItem(${item.id})">মুছুন</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function saveMenuItem() {
+            const editId = document.getElementById('edit-item-id').value;
+            const name = document.getElementById('item-name').value.trim();
+            const price = parseFloat(document.getElementById('item-price').value);
+            const category = document.getElementById('item-cat').value;
+            const imgBase64 = document.getElementById('item-img-base64').value;
+            
+            const defaultImg = 'https://via.placeholder.com/150';
+            const img = imgBase64 || defaultImg;
+
+            if (!name || isNaN(price)) {
+                alert('সঠিক নাম ও মূল্য লিখুন!');
+                return;
+            }
+
+            if (editId) {
+                let item = menuData.find(i => i.id == editId);
+                if (item) {
+                    item.name = name;
+                    item.price = price;
+                    item.category = category;
+                    if(imgBase64) item.img = imgBase64;
+                    alert('খাবারের তথ্য আপডেট হয়েছে!');
+                }
+            } else {
+                const newItem = { id: Date.now(), name, price, category, img, desc: "" };
+                menuData.push(newItem);
+                alert('নতুন খাবার গ্যালারি ছবিসহ যুক্ত হয়েছে!');
+            }
+
+            saveMenuData();
+            resetItemForm();
+            renderCategories();
+            renderMenu();
+            renderAdminMenuList();
+        }
+
+        function editMenuItem(id) {
+            const item = menuData.find(i => i.id == id);
+            if (item) {
+                document.getElementById('edit-item-id').value = item.id;
+                document.getElementById('item-name').value = item.name;
+                document.getElementById('item-price').value = item.price;
+                document.getElementById('item-cat').value = item.category;
+
+                const preview = document.getElementById('img-preview');
+                preview.src = item.img;
+                preview.style.display = 'block';
+
+                document.getElementById('form-title').innerText = "✏️ খাবার এডিট করুন";
+                document.getElementById('save-item-btn').innerText = "আপডেট সেভ করুন";
+                document.getElementById('cancel-edit-btn').style.display = "block";
+            }
+        }
+
+        function resetItemForm() {
+            document.getElementById('edit-item-id').value = "";
+            document.getElementById('item-name').value = "";
+            document.getElementById('item-price').value = "";
+            document.getElementById('item-img-file').value = "";
+            document.getElementById('item-img-base64').value = "";
+            document.getElementById('img-preview').style.display = "none";
+            document.getElementById('form-title').innerText = "🍔 নতুন খাবার যুক্ত করুন";
+            document.getElementById('save-item-btn').innerText = "খাবার সংরক্ষণ করুন";
+            document.getElementById('cancel-edit-btn').style.display = "none";
+        }
+
+        function deleteMenuItem(id) {
+            if (confirm('আপনি কি এই খাবারটি তালিকা থেকে মুছে ফেলতে চান?')) {
+                menuData = menuData.filter(item => item.id !== id);
+                saveMenuData();
+                renderCategories();
+                renderMenu();
+                renderAdminMenuList();
+            }
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+            renderMenu();
+        }
+
+        updateSiteHeader();
+        renderTableOptions();
+        renderCategories();
+        renderMenu();
+    </script>
+</body>
+</html>
