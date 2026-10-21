@@ -376,7 +376,7 @@
 
         async function saveCloudData() {
             try {
-                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -384,6 +384,9 @@
                     },
                     body: JSON.stringify(appData)
                 });
+                if (!res.ok) {
+                    alert('সতর্কতা: ডাটাবেজ ফুল বা সেভ হতে সমস্যা হয়েছে। ছবির সাইজ আরও ছোট করুন!');
+                }
             } catch (err) {
                 console.error("Cloud save error:", err);
             }
@@ -699,7 +702,7 @@
             `).join('');
         }
 
-        // Optimized Image Compression Function for Gallery, Camera or Drive
+        // Ultra-Compressed Image Function (Ensures 30+ items save seamlessly)
         async function addNewFoodItem() {
             const name = document.getElementById('add-name').value.trim();
             const price = parseFloat(document.getElementById('add-price').value);
@@ -724,13 +727,14 @@
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
                         
-                        const maxWidth = 300;
+                        // Resizing to max width 150px for ultimate lightweight data
+                        const maxWidth = 150;
                         const scaleSize = maxWidth / image.width;
                         canvas.width = maxWidth;
                         canvas.height = image.height * scaleSize;
 
                         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-                        img = canvas.toDataURL('image/jpeg', 0.6);
+                        img = canvas.toDataURL('image/jpeg', 0.4); // High compression to save space
 
                         appData.menu.push({ id: Date.now(), name, price, category, img });
                         await saveCloudData();
