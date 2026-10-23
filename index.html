@@ -281,7 +281,7 @@
 
     <script>
         const BIN_ID = '679a8e03e41b4d34e4811a2d';
-        const API_KEY = '$2a$10$8v/sN6SjR7u/J.7z4j1oQeW/0d4E9o0J2u4xZ5B5N3k5L5M5N5O5P';
+        const API_KEY = '$2a$10$dqSR9ocLraNLKmig9LGam.zAL3xU1VkOoQAeqjEbSNDEpBSHLeCe6';
         const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
         let serverData = { config: {}, menu: [], orders: [], history: [] };
@@ -289,7 +289,6 @@
 
         async function initSite() {
             await fetchCloudData();
-            // প্রতি ২.৫ সেকেন্ড পর পর সার্ভার থেকে লাইভ সিংক করবে
             setInterval(fetchCloudData, 2500);
         }
 
