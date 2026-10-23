@@ -162,7 +162,7 @@
         <button class="cart-btn" onclick="openCheckoutModal()">অর্ডার করুন ➔</button>
     </div>
 
-    <!-- ১. কাস্টমার তথ্য নেওয়ার কাস্টম চেকআউট মডাল -->
+    <!-- ১. কাস্টমার তথ্য নেওয়ার চেকআউট মডাল -->
     <div id="checkout-modal" class="modal">
         <div class="modal-box">
             <div class="admin-header">
@@ -249,7 +249,7 @@
                                     <option value="হালকা খাবার ও ইত্যাদি">হালকা খাবার ও ইত্যাদি</option>
                                 </select>
                             </div>
-                            <div class="form-group"><label>ছবির Direct Link (PostImages থেকে):</label><input type="url" id="food-image" placeholder="https://i.postimg.cc/..." required></div>
+                            <div class="form-group"><label>ছবির Direct Link (PostImages):</label><input type="url" id="food-image" placeholder="https://i.postimg.cc/..." required></div>
                             <button type="submit" class="btn-save" id="save-food-btn">+ মেনুতে যুক্ত করুন</button>
                         </form>
                     </div>
@@ -298,11 +298,9 @@
         let serverData = { config: {}, menu: [], orders: [], history: [] };
         let cart = [];
 
-        // অ্যাপ লোড
         async function initSite() {
             await fetchCloudData();
-            // রিয়েল-টাইম লাইভ সিংক (প্রতি ২.৫ সেকেন্ডে ডাটা সেভ/আপডেট হবে)
-            setInterval(fetchCloudData, 2500);
+            setInterval(fetchCloudData, 3000);
         }
 
         async function fetchCloudData() {
@@ -313,13 +311,15 @@
 
                 if (!serverData.config) serverData.config = { name: "☕ মুহূর্ত-Cafe", tagline: '"প্রতিটি চুমুকে একটুকু মুহূর্ত।"', address: "📍 গকুলনগর বাসস্ট্যান্ড, রায়পুরা, নরসিংদী" };
                 if (!serverData.history) serverData.history = [];
+                if (!serverData.menu) serverData.menu = [];
+                if (!serverData.orders) serverData.orders = [];
 
                 applyShopConfig();
-                renderCustomerMenu(serverData.menu || []);
+                renderCustomerMenu(serverData.menu);
                 
                 if (document.getElementById('admin-dashboard').style.display === 'block') {
-                    renderLiveOrders(serverData.orders || []);
-                    renderMenuManagementList(serverData.menu || []);
+                    renderLiveOrders(serverData.orders);
+                    renderMenuManagementList(serverData.menu);
                     renderSalesReport();
                 }
             } catch (e) { console.error("Sync error..."); }
@@ -417,7 +417,7 @@
             btn.disabled = false;
         }
 
-        /* --- এডমিন কন্ট্রোল --- */
+        // --- এডমিন কন্ট্রোল ---
         function openAdminPanel() {
             document.getElementById('admin-modal').style.display = 'block';
             document.getElementById('pin-screen').style.display = 'block';
@@ -462,7 +462,6 @@
                         <div style="margin:4px 0; background:#fdfbf7; padding:4px; border-radius:4px;">${ord.items}</div>
                         <div style="color:var(--success-green); font-weight:bold;">মোট বিল: ৳${ord.total}</div>
                         
-                        <!-- মেসেজ পাঠানো ১-ক্লিক বাটন -->
                         <div class="wa-actions">
                             <button class="wa-btn" onclick="sendWAMessage('${ord.phone}', '${ord.name}', 'confirm')">
                                 💬 ১. অর্ডার কনফার্মেশন মেসেজ
@@ -485,10 +484,8 @@
             container.innerHTML = html;
         }
 
-        // হোয়াটসঅ্যাপ অটো-মেসেজ লজিক
         function sendWAMessage(phone, name, type) {
             if (!phone) return alert("কাস্টমারের ফোন নম্বর পাওয়া যায়নি!");
-            
             let cleanPhone = phone.replace(/[^0-9]/g, '');
             if (cleanPhone.startsWith('0')) cleanPhone = '88' + cleanPhone;
 
@@ -521,7 +518,7 @@
 
         function renderMenuManagementList(menu) {
             const container = document.getElementById('existing-menu-list');
-            if (menu.length === 0) return container.innerHTML = `<p style="color:#777; font-size:11px;">কোনো খাবার নেই</p>`;
+            if (!menu || menu.length === 0) return container.innerHTML = `<p style="color:#777; font-size:11px;">কোনো খাবার নেই</p>`;
             let html = '';
             menu.forEach((item, index) => {
                 html += `
@@ -536,6 +533,10 @@
 
         async function addNewFood(e) {
             e.preventDefault();
+            const btn = document.getElementById('save-food-btn');
+            btn.innerText = "সেভ হচ্ছে...";
+            btn.disabled = true;
+
             const newFood = {
                 id: Date.now(),
                 name: document.getElementById('food-name').value,
@@ -543,19 +544,31 @@
                 category: document.getElementById('food-category').value,
                 image: document.getElementById('food-image').value
             };
+
             if (!serverData.menu) serverData.menu = [];
             serverData.menu.push(newFood);
+
             const ok = await updateCloudData();
             if (ok) {
-                alert("নতুন খাবার মেনুতে সেভ হয়েছে এবং কাস্টমারদের মোবাইলে আপগ্রেড হয়ে গেছে!");
+                alert("নতুন খাবার মেনুতে সফলভাবে সেভ হয়েছে!");
                 document.getElementById('menu-form').reset();
+                renderMenuManagementList(serverData.menu);
+                renderCustomerMenu(serverData.menu);
+            } else {
+                alert("সেভ করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
             }
+            btn.innerText = "+ মেনুতে যুক্ত করুন";
+            btn.disabled = false;
         }
 
         async function deleteMenuItem(idx) {
             if (confirm("এই খাবারটি মেনু থেকে ডিলিট করতে চান?")) {
                 serverData.menu.splice(idx, 1);
-                await updateCloudData();
+                const ok = await updateCloudData();
+                if (ok) {
+                    renderMenuManagementList(serverData.menu);
+                    renderCustomerMenu(serverData.menu);
+                }
             }
         }
 
@@ -582,7 +595,7 @@
                 address: document.getElementById('set-shop-address').value
             };
             const ok = await updateCloudData();
-            if (ok) alert("দোকানের নাম ও তথ্য আপডেট হয়েছে!");
+            if (ok) alert("দোকানের নাম ও তথ্য সফলভাবে আপডেট হয়েছে!");
         }
 
         async function updateCloudData() {
@@ -592,7 +605,10 @@
                     headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
                     body: JSON.stringify(serverData)
                 });
-                if (res.ok) { fetchCloudData(); return true; }
+                if (res.ok) { 
+                    await fetchCloudData(); 
+                    return true; 
+                }
                 return false;
             } catch (e) { return false; }
         }
