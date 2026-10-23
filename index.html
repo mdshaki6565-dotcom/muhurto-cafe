@@ -13,7 +13,6 @@
             --text-dark: #2c2c2c;
             --success-green: #27ae60;
             --danger-red: #c0392b;
-            --wa-green: #25d366;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -71,7 +70,7 @@
         }
         .cart-btn { background: var(--accent-gold); color: var(--primary-brown); border: none; padding: 6px 14px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer; }
 
-        /* সাধারণ মডাল / পপআপ */
+        /* মডাল */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); z-index: 1000; overflow-y: auto; padding: 10px;
@@ -93,7 +92,6 @@
         .section-card { background: #fffdf9; border: 1px solid #e2d9c5; border-radius: 6px; padding: 10px; margin-bottom: 10px; }
         .section-card h4 { font-size: 13px; color: var(--primary-brown); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* সেলস সামারি কার্ড */
         .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
         .report-card { background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 6px; text-align: center; }
         .report-card div { font-size: 11px; color: #666; }
@@ -101,14 +99,6 @@
 
         .order-card { background: #ffffff; border: 1px solid #d4c5a9; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 12px; }
         
-        /* হোয়াটসঅ্যাপ বাটন স্টাইল */
-        .wa-actions { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; background: #f0fdf4; padding: 6px; border-radius: 5px; border: 1px solid #bbf7d0; }
-        .wa-btn {
-            background: var(--wa-green); color: white; border: none; padding: 5px 8px;
-            border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; text-align: left;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-
         .order-actions { display: flex; gap: 5px; margin-top: 8px; }
         .order-actions button { flex: 1; padding: 6px; font-size: 11px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; }
         .btn-done { background: var(--success-green); color: white; }
@@ -126,7 +116,7 @@
 <body>
 
     <div class="container">
-        <!-- ডায়নামিক ক্যাফে হেডার -->
+        <!-- ক্যাফে হেডার -->
         <header class="cafe-header">
             <h1 id="disp-title">☕ মুহূর্ত-Cafe</h1>
             <p class="tagline" id="disp-tagline">"প্রতিটি চুমুকে একটুকু মুহূর্ত।"</p>
@@ -162,7 +152,7 @@
         <button class="cart-btn" onclick="openCheckoutModal()">অর্ডার করুন ➔</button>
     </div>
 
-    <!-- ১. কাস্টমার তথ্য নেওয়ার চেকআউট মডাল -->
+    <!-- চেকআউট মডাল -->
     <div id="checkout-modal" class="modal">
         <div class="modal-box">
             <div class="admin-header">
@@ -175,7 +165,7 @@
                     <input type="text" id="cust-name" placeholder="যেমন: মো: শাকিল" required>
                 </div>
                 <div class="form-group">
-                    <label>মোবাইল নম্বর (SMS/WhatsApp নোটিফিকেশনের জন্য):</label>
+                    <label>মোবাইল নম্বর:</label>
                     <input type="tel" id="cust-phone" placeholder="017XXXXXXXX" required>
                 </div>
                 <div class="form-group">
@@ -184,14 +174,14 @@
                 </div>
                 <div style="background:#fdfbf7; padding:8px; border:1px solid #e2d9c5; border-radius:5px; margin:10px 0; font-size:12px;">
                     <strong>অর্ডারের তালিকা:</strong> <span id="checkout-summary-items"></span><br>
-                    <strong>সর্বমোট দাম:</strong> <span id="checkout-summary-total" style="color:var(--success-green); font-weight:bold;"></span>
+                    <strong>সর্বমোট বিল:</strong> <span id="checkout-summary-total" style="color:var(--success-green); font-weight:bold;"></span>
                 </div>
                 <button type="submit" class="btn-save" id="submit-order-btn">অর্ডার কনফার্ম করুন</button>
             </form>
         </div>
     </div>
 
-    <!-- ২. এডমিন প্যানেল মডাল -->
+    <!-- এডমিন প্যানেল মডাল -->
     <div id="admin-modal" class="modal">
         <div class="modal-box">
             
@@ -211,7 +201,6 @@
                     <button class="close-btn" onclick="closeAdminPanel()">বন্ধ করুন</button>
                 </div>
 
-                <!-- এডমিন ন্যাভিগেশন ট্যাব -->
                 <div class="admin-tabs">
                     <button class="admin-tab-btn active" onclick="switchAdminTab('live-orders', this)">📦 লাইভ অর্ডার</button>
                     <button class="admin-tab-btn" onclick="switchAdminTab('menu-mgmt', this)">🍔 মেনু এডিট</button>
@@ -219,7 +208,7 @@
                     <button class="admin-tab-btn" onclick="switchAdminTab('settings', this)">⚙️ সেটিং</button>
                 </div>
 
-                <!-- ১. লাইভ অর্ডার সেকশন -->
+                <!-- ১. লাইভ অর্ডার -->
                 <div id="tab-live-orders" class="admin-tab-content">
                     <div class="section-card">
                         <h4>
@@ -232,13 +221,13 @@
                     </div>
                 </div>
 
-                <!-- ২. মেনু ম্যানেজমেন্ট (খাবার যোগ, এডিট ও ডিলিট) -->
+                <!-- ২. মেনু ম্যানেজমেন্ট -->
                 <div id="tab-menu-mgmt" class="admin-tab-content" style="display: none;">
                     <div class="section-card">
                         <h4>➕ নতুন খাবার যোগ করুন</h4>
                         <form id="menu-form" onsubmit="addNewFood(event)">
-                            <div class="form-group"><label>খাবারের নাম:</label><input type="text" id="food-name" placeholder="যেমন: কোল্ড কফি" required></div>
-                            <div class="form-group"><label>দাম (৳):</label><input type="number" id="food-price" placeholder="যেমন: ৫০" required></div>
+                            <div class="form-group"><label>খাবারের নাম:</label><input type="text" id="food-name" placeholder="যেমন: ফুচকা" required></div>
+                            <div class="form-group"><label>দাম (৳):</label><input type="number" id="food-price" placeholder="যেমন: ৬০" required></div>
                             <div class="form-group">
                                 <label>ক্যাটেগরি:</label>
                                 <select id="food-category">
@@ -260,11 +249,11 @@
                     </div>
                 </div>
 
-                <!-- ৩. সেলস রিপোর্ট (হিসেব) -->
+                <!-- ৩. সেলস রিপোর্ট -->
                 <div id="tab-reports" class="admin-tab-content" style="display: none;">
                     <div class="report-grid">
                         <div class="report-card"><div>মোট কমপ্লিট অর্ডার</div><strong id="rep-total-orders">০টি</strong></div>
-                        <div class="report-card"><div>মোট মোট বিক্রি (ক্যাশ)</div><strong id="rep-total-sales">৳০</strong></div>
+                        <div class="report-card"><div>মোট বিক্রয় পরিমাণ</div><strong id="rep-total-sales">৳০</strong></div>
                     </div>
                     <div class="section-card">
                         <h4>📜 সম্পন্ন হওয়া অর্ডারের ইতিহাস</h4>
@@ -300,7 +289,8 @@
 
         async function initSite() {
             await fetchCloudData();
-            setInterval(fetchCloudData, 3000);
+            // প্রতি ২.৫ সেকেন্ড পর পর সার্ভার থেকে লাইভ সিংক করবে
+            setInterval(fetchCloudData, 2500);
         }
 
         async function fetchCloudData() {
@@ -310,19 +300,34 @@
                 serverData = data.record || { config: {}, menu: [], orders: [], history: [] };
 
                 if (!serverData.config) serverData.config = { name: "☕ মুহূর্ত-Cafe", tagline: '"প্রতিটি চুমুকে একটুকু মুহূর্ত।"', address: "📍 গকুলনগর বাসস্ট্যান্ড, রায়পুরা, নরসিংদী" };
-                if (!serverData.history) serverData.history = [];
                 if (!serverData.menu) serverData.menu = [];
                 if (!serverData.orders) serverData.orders = [];
+                if (!serverData.history) serverData.history = [];
 
                 applyShopConfig();
                 renderCustomerMenu(serverData.menu);
-                
+
                 if (document.getElementById('admin-dashboard').style.display === 'block') {
                     renderLiveOrders(serverData.orders);
                     renderMenuManagementList(serverData.menu);
                     renderSalesReport();
                 }
-            } catch (e) { console.error("Sync error..."); }
+            } catch (e) { console.error("Syncing..."); }
+        }
+
+        async function updateCloudData() {
+            try {
+                const res = await fetch(BIN_URL, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                    body: JSON.stringify(serverData)
+                });
+                if (res.ok) {
+                    await fetchCloudData();
+                    return true;
+                }
+                return false;
+            } catch (e) { return false; }
         }
 
         function applyShopConfig() {
@@ -333,8 +338,8 @@
 
         function renderCustomerMenu(items) {
             const container = document.getElementById('menu-container');
-            if (items.length === 0) {
-                container.innerHTML = `<p style="text-align:center; grid-column:span 2; color:#777; font-size:12px;">কোনো খাবার যুক্ত নেই।</p>`;
+            if (!items || items.length === 0) {
+                container.innerHTML = `<p style="text-align:center; grid-column:span 2; color:#777; font-size:12px; padding:20px;">কোনো খাবার নেই।</p>`;
                 return;
             }
             let html = '';
@@ -374,9 +379,7 @@
             document.getElementById('checkout-modal').style.display = 'block';
         }
 
-        function closeCheckoutModal() {
-            document.getElementById('checkout-modal').style.display = 'none';
-        }
+        function closeCheckoutModal() { document.getElementById('checkout-modal').style.display = 'none'; }
 
         async function submitCustomerOrder(e) {
             e.preventDefault();
@@ -384,40 +387,33 @@
             btn.innerText = "অর্ডার পাঠানো হচ্ছে...";
             btn.disabled = true;
 
-            const name = document.getElementById('cust-name').value;
-            const phone = document.getElementById('cust-phone').value;
-            const table = document.getElementById('cust-table').value;
-            const itemsDesc = cart.map(i => `${i.name} (৳${i.price})`).join(', ');
-            const totalAmount = cart.reduce((s, i) => s + i.price, 0);
-
             const newOrder = {
                 id: Math.floor(100 + Math.random() * 900),
-                name: name,
-                phone: phone,
-                table: table,
-                items: itemsDesc,
-                total: totalAmount,
+                name: document.getElementById('cust-name').value,
+                phone: document.getElementById('cust-phone').value,
+                table: document.getElementById('cust-table').value,
+                items: cart.map(i => `${i.name} (৳${i.price})`).join(', '),
+                total: cart.reduce((s, i) => s + i.price, 0),
                 time: new Date().toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' })
             };
 
-            if (!serverData.orders) serverData.orders = [];
             serverData.orders.push(newOrder);
-
             const ok = await updateCloudData();
+
             if (ok) {
-                alert(`ধন্যবাদ ${name}! আপনার অর্ডারটি ক্যাফেতে সফলভাবে পাঠানো হয়েছে।`);
+                alert(`ধন্যবাদ ${newOrder.name}! আপনার অর্ডারটি সফলভাবে ক্যাফেতে পাঠানো হয়েছে।`);
                 cart = [];
                 document.getElementById('cart-count').innerText = `০টি আইটেম`;
                 document.getElementById('cart-total').innerText = `৳০`;
                 closeCheckoutModal();
             } else {
-                alert("নেটওয়ার্ক সমস্যা! আবার চেষ্টা করুন।");
+                alert("অর্ডার পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
             }
             btn.innerText = "অর্ডার কনফার্ম করুন";
             btn.disabled = false;
         }
 
-        // --- এডমিন কন্ট্রোল ---
+        /* --- এডমিন প্যানেল --- */
         function openAdminPanel() {
             document.getElementById('admin-modal').style.display = 'block';
             document.getElementById('pin-screen').style.display = 'block';
@@ -455,25 +451,13 @@
                 html += `
                     <div class="order-card">
                         <div style="display:flex; justify-content:space-between; font-weight:bold; color:var(--primary-brown);">
-                            <span>অর্ডার #${ord.id} - ${ord.name || 'কাস্টমার'}</span>
+                            <span>অর্ডার #${ord.id} - ${ord.name}</span>
                             <span>⏰ ${ord.time}</span>
                         </div>
-                        <div style="font-size:11px; color:#555; margin:2px 0;">📱 ${ord.phone || 'নম্বর নাই'} | 📍 ${ord.table || 'টেবিল নাই'}</div>
+                        <div style="font-size:11px; color:#555; margin:2px 0;">📱 ফোন: ${ord.phone} | 📍 টেবিল/পার্সেল: ${ord.table}</div>
                         <div style="margin:4px 0; background:#fdfbf7; padding:4px; border-radius:4px;">${ord.items}</div>
                         <div style="color:var(--success-green); font-weight:bold;">মোট বিল: ৳${ord.total}</div>
                         
-                        <div class="wa-actions">
-                            <button class="wa-btn" onclick="sendWAMessage('${ord.phone}', '${ord.name}', 'confirm')">
-                                💬 ১. অর্ডার কনফার্মেশন মেসেজ
-                            </button>
-                            <button class="wa-btn" onclick="sendWAMessage('${ord.phone}', '${ord.name}', 'ready')">
-                                🍕 ২. খাবার রেডি ও পৌঁছানোর মেসেজ
-                            </button>
-                            <button class="wa-btn" onclick="sendWAMessage('${ord.phone}', '${ord.name}', 'paid')">
-                                🧾 ৩. বিল পরিশোধ ও ধন্যবাদ মেসেজ
-                            </button>
-                        </div>
-
                         <div class="order-actions">
                             <button class="btn-done" onclick="completeOrder(${realIdx})">✓ কমপ্লিট করুন</button>
                             <button class="btn-del" onclick="deleteOrder(${realIdx})">✕ বাতিল</button>
@@ -482,24 +466,6 @@
                 `;
             });
             container.innerHTML = html;
-        }
-
-        function sendWAMessage(phone, name, type) {
-            if (!phone) return alert("কাস্টমারের ফোন নম্বর পাওয়া যায়নি!");
-            let cleanPhone = phone.replace(/[^0-9]/g, '');
-            if (cleanPhone.startsWith('0')) cleanPhone = '88' + cleanPhone;
-
-            let msg = '';
-            if (type === 'confirm') {
-                msg = `প্রিয় ${name}, মুহূর্ত-Cafe-তে আপনার অর্ডারটি কনফার্ম করা হয়েছে! আপনার পছন্দের খাবারটি দ্রুত তৈরি করা হচ্ছে। সাথে থাকার জন্য ধন্যবাদ! ☕`;
-            } else if (type === 'ready') {
-                msg = `প্রিয় ${name}, আপনার সুস্বাদু খাবার তৈরি এবং আপনার টেবিলে পৌঁছে দেওয়া হয়েছে! এখন গরম গরম উপভোগ করুন। শুভকামনা! 🍔☕`;
-            } else if (type === 'paid') {
-                msg = `প্রিয় ${name}, আপনার বিল সঠিকভাবে পরিশোধিত হয়েছে। মুহূর্ত-Cafe-তে আসার জন্য আন্তরিকভাবে ধন্যবাদ, আবার আসবেন! 😊✨`;
-            }
-
-            const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
-            window.open(waUrl, '_blank');
         }
 
         async function completeOrder(idx) {
@@ -545,15 +511,12 @@
                 image: document.getElementById('food-image').value
             };
 
-            if (!serverData.menu) serverData.menu = [];
             serverData.menu.push(newFood);
-
             const ok = await updateCloudData();
+
             if (ok) {
-                alert("নতুন খাবার মেনুতে সফলভাবে সেভ হয়েছে!");
+                alert("নতুন খাবার সফলভাবে যুক্ত হয়েছে এবং সবার মোবাইলে লাইভ আপডেট হয়ে গেছে!");
                 document.getElementById('menu-form').reset();
-                renderMenuManagementList(serverData.menu);
-                renderCustomerMenu(serverData.menu);
             } else {
                 alert("সেভ করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
             }
@@ -564,11 +527,7 @@
         async function deleteMenuItem(idx) {
             if (confirm("এই খাবারটি মেনু থেকে ডিলিট করতে চান?")) {
                 serverData.menu.splice(idx, 1);
-                const ok = await updateCloudData();
-                if (ok) {
-                    renderMenuManagementList(serverData.menu);
-                    renderCustomerMenu(serverData.menu);
-                }
+                await updateCloudData();
             }
         }
 
@@ -596,21 +555,6 @@
             };
             const ok = await updateCloudData();
             if (ok) alert("দোকানের নাম ও তথ্য সফলভাবে আপডেট হয়েছে!");
-        }
-
-        async function updateCloudData() {
-            try {
-                const res = await fetch(BIN_URL, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-                    body: JSON.stringify(serverData)
-                });
-                if (res.ok) { 
-                    await fetchCloudData(); 
-                    return true; 
-                }
-                return false;
-            } catch (e) { return false; }
         }
 
         initSite();
