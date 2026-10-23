@@ -289,12 +289,14 @@
 
         async function initSite() {
             await fetchCloudData();
-            setInterval(fetchCloudData, 2500);
+            // প্রতি ৩ সেকেন্ড পর পর সার্ভার থেকে অটো সিংক করবে, ফলে সবার মোবাইলে লাইভ আপডেট হবে
+            setInterval(fetchCloudData, 3000);
         }
 
         async function fetchCloudData() {
             try {
                 const res = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
+                if (!res.ok) return;
                 const data = await res.json();
                 serverData = data.record || { config: {}, menu: [], orders: [], history: [] };
 
@@ -311,7 +313,7 @@
                     renderMenuManagementList(serverData.menu);
                     renderSalesReport();
                 }
-            } catch (e) { console.error("Syncing..."); }
+            } catch (e) { console.error("Syncing error..."); }
         }
 
         async function updateCloudData() {
@@ -514,7 +516,7 @@
             const ok = await updateCloudData();
 
             if (ok) {
-                alert("নতুন খাবার সফলভাবে যুক্ত হয়েছে এবং সবার মোবাইলে লাইভ আপডেট হয়ে গেছে!");
+                alert("নতুন খাবার সফলভাবে ক্লাউডে সেভ হয়েছে এবং সবার মোবাইলে লাইভ আপডেট হয়ে গেছে!");
                 document.getElementById('menu-form').reset();
             } else {
                 alert("সেভ করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
@@ -542,7 +544,7 @@
             history.slice().reverse().forEach(h => {
                 html += `<div style="border-bottom:1px solid #eee; padding:4px 0;"><strong>#${h.id} (${h.name} - ${h.table})</strong> - ৳${h.total} <br><span style="color:#666;">${h.items}</span></div>`;
             });
-            container.innerHTML = html;
+            container.innerHTML = history.length ? html : '';
         }
 
         async function saveShopSettings(e) {
