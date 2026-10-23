@@ -140,7 +140,7 @@
 
         <!-- মেনু আইটেম এলাকা -->
         <div id="menu-container" class="menu-grid">
-            <p style="text-align: center; grid-column: span 2; color: #777; padding: 20px; font-size: 13px;">লাইভ মেনু লোড হচ্ছে...</p>
+            <p style="text-align: center; grid-column: span 2; color: #777; padding: 20px; font-size: 13px;">মেনু লোড হচ্ছে...</p>
         </div>
     </div>
 
@@ -280,67 +280,57 @@
     </div>
 
     <script>
-        const BIN_ID = '679a8e03e41b4d34e4811a2d';
-        const API_KEY = '$2a$10$dqSR9ocLraNLKmig9LGam.zAL3xU1VkOoQAeqjEbSNDEpBSHLeCe6';
-        const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-
-        let serverData = { config: {}, menu: [], orders: [], history: [] };
+        let serverData = {
+            config: { name: "☕ মুহূর্ত-Cafe", tagline: '"প্রতিটি চুমুকে একটুকু মুহূর্ত।"', address: "📍 গকুলনগর বাসস্ট্যান্ড, রায়পুরা, নরসিংদী" },
+            menu: [],
+            orders: [],
+            history: []
+        };
         let cart = [];
 
-        async function initSite() {
-            await fetchCloudData();
-            // প্রতি ৩ সেকেন্ড পর পর সার্ভার থেকে সিংক করবে, ফলে সবার ফোনে লাইভ আপডেট হবে
-            setInterval(fetchCloudData, 3000);
+        function initSite() {
+            loadLocalData();
+            applyShopConfig();
+            renderCustomerMenu(serverData.menu);
         }
 
-        async function fetchCloudData() {
-            try {
-                const res = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
-                if (!res.ok) return;
-                const data = await res.json();
-                serverData = data.record || { config: {}, menu: [], orders: [], history: [] };
+        function loadLocalData() {
+            const saved = localStorage.getItem('muhurto_cafe_data_v2');
+            if (saved) {
+                try {
+                    serverData = JSON.parse(saved);
+                } catch(e) {}
+            }
+            if (!serverData.menu) serverData.menu = [];
+            if (!serverData.orders) serverData.orders = [];
+            if (!serverData.history) serverData.history = [];
+            if (!serverData.config) serverData.config = { name: "☕ মুহূর্ত-Cafe", tagline: '"প্রতিটি চুমুকে একটুকু মুহূর্ত।"', address: "📍 গকুলনগর বাসস্ট্যান্ড, রায়পুরা, নরসিংদী" };
 
-                if (!serverData.config) serverData.config = { name: "☕ মুহূর্ত-Cafe", tagline: '"প্রতিটি চুমুকে একটুকু মুহূর্ত।"', address: "📍 গকুলনগর বাসস্ট্যান্ড, রায়পুরা, নরসিংদী" };
-                if (!serverData.menu) serverData.menu = [];
-                if (!serverData.orders) serverData.orders = [];
-                if (!serverData.history) serverData.history = [];
-
-                applyShopConfig();
-                renderCustomerMenu(serverData.menu);
-
-                if (document.getElementById('admin-dashboard').style.display === 'block') {
-                    renderLiveOrders(serverData.orders);
-                    renderMenuManagementList(serverData.menu);
-                    renderSalesReport();
-                }
-            } catch (e) { console.error("Syncing error..."); }
+            applyShopConfig();
+            renderCustomerMenu(serverData.menu);
+            
+            if (document.getElementById('admin-dashboard').style.display === 'block') {
+                renderLiveOrders(serverData.orders);
+                renderMenuManagementList(serverData.menu);
+                renderSalesReport();
+            }
         }
 
-        async function updateCloudData() {
-            try {
-                const res = await fetch(BIN_URL, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-                    body: JSON.stringify(serverData)
-                });
-                if (res.ok) {
-                    await fetchCloudData();
-                    return true;
-                }
-                return false;
-            } catch (e) { return false; }
+        function saveData() {
+            localStorage.setItem('muhurto_cafe_data_v2', JSON.stringify(serverData));
+            loadLocalData();
         }
 
         function applyShopConfig() {
-            document.getElementById('disp-title').innerText = serverData.config.name || "☕ মুহূর্ত-Cafe";
-            document.getElementById('disp-tagline').innerText = serverData.config.tagline || "";
-            document.getElementById('disp-address').innerText = serverData.config.address || "";
+            document.getElementById('disp-title').innerText = serverData.config.name;
+            document.getElementById('disp-tagline').innerText = serverData.config.tagline;
+            document.getElementById('disp-address').innerText = serverData.config.address;
         }
 
         function renderCustomerMenu(items) {
             const container = document.getElementById('menu-container');
             if (!items || items.length === 0) {
-                container.innerHTML = `<p style="text-align:center; grid-column:span 2; color:#777; font-size:12px; padding:20px;">কোনো খাবার নেই।</p>`;
+                container.innerHTML = `<p style="text-align:center; grid-column:span 2; color:#777; font-size:12px; padding:20px;">কোনো খাবার নেই। এডমিন প্যানেল থেকে খাবার যোগ করুন।</p>`;
                 return;
             }
             let html = '';
@@ -382,12 +372,8 @@
 
         function closeCheckoutModal() { document.getElementById('checkout-modal').style.display = 'none'; }
 
-        async function submitCustomerOrder(e) {
+        function submitCustomerOrder(e) {
             e.preventDefault();
-            const btn = document.getElementById('submit-order-btn');
-            btn.innerText = "অর্ডার পাঠানো হচ্ছে...";
-            btn.disabled = true;
-
             const newOrder = {
                 id: Math.floor(100 + Math.random() * 900),
                 name: document.getElementById('cust-name').value,
@@ -399,19 +385,13 @@
             };
 
             serverData.orders.push(newOrder);
-            const ok = await updateCloudData();
+            saveData();
 
-            if (ok) {
-                alert(`ধন্যবাদ ${newOrder.name}! আপনার অর্ডারটি সফলভাবে ক্যাফেতে পাঠানো হয়েছে।`);
-                cart = [];
-                document.getElementById('cart-count').innerText = `০টি আইটেম`;
-                document.getElementById('cart-total').innerText = `৳০`;
-                closeCheckoutModal();
-            } else {
-                alert("অর্ডার পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
-            }
-            btn.innerText = "অর্ডার কনফার্ম করুন";
-            btn.disabled = false;
+            alert(`ধন্যবাদ ${newOrder.name}! আপনার অর্ডারটি সফলভাবে ক্যাফেতে পাঠানো হয়েছে।`);
+            cart = [];
+            document.getElementById('cart-count').innerText = `০টি আইটেম`;
+            document.getElementById('cart-total').innerText = `৳০`;
+            closeCheckoutModal();
         }
 
         /* --- এডমিন প্যানেল --- */
@@ -427,10 +407,10 @@
             if (document.getElementById('pin-input').value === '6565') {
                 document.getElementById('pin-screen').style.display = 'none';
                 document.getElementById('admin-dashboard').style.display = 'block';
-                document.getElementById('set-shop-name').value = serverData.config.name || '';
-                document.getElementById('set-shop-tagline').value = serverData.config.tagline || '';
-                document.getElementById('set-shop-address').value = serverData.config.address || '';
-                fetchCloudData();
+                document.getElementById('set-shop-name').value = serverData.config.name;
+                document.getElementById('set-shop-tagline').value = serverData.config.tagline;
+                document.getElementById('set-shop-address').value = serverData.config.address;
+                loadLocalData();
             } else { alert("ভুল পিন কোড!"); }
         }
 
@@ -455,10 +435,10 @@
                             <span>অর্ডার #${ord.id} - ${ord.name}</span>
                             <span>⏰ ${ord.time}</span>
                         </div>
-                        <div style="font-size:11px; color:#555; margin:2px 0;">📱 ফোন: ${ord.phone} | 📍 টেবিল/পার্সেল: ${ord.table}</div>
+                        <div style="font-size:11px; color:#555; margin:2px 0;">📱 ${ord.phone} | 📍 ${ord.table}</div>
                         <div style="margin:4px 0; background:#fdfbf7; padding:4px; border-radius:4px;">${ord.items}</div>
                         <div style="color:var(--success-green); font-weight:bold;">মোট বিল: ৳${ord.total}</div>
-                        
+
                         <div class="order-actions">
                             <button class="btn-done" onclick="completeOrder(${realIdx})">✓ কমপ্লিট করুন</button>
                             <button class="btn-del" onclick="deleteOrder(${realIdx})">✕ বাতিল</button>
@@ -469,17 +449,16 @@
             container.innerHTML = html;
         }
 
-        async function completeOrder(idx) {
+        function completeOrder(idx) {
             const completed = serverData.orders.splice(idx, 1)[0];
-            if (!serverData.history) serverData.history = [];
             serverData.history.push(completed);
-            await updateCloudData();
+            saveData();
         }
 
-        async function deleteOrder(idx) {
+        function deleteOrder(idx) {
             if (confirm("অর্ডারটি বাতিল করতে চান?")) {
                 serverData.orders.splice(idx, 1);
-                await updateCloudData();
+                saveData();
             }
         }
 
@@ -498,12 +477,8 @@
             container.innerHTML = html;
         }
 
-        async function addNewFood(e) {
+        function addNewFood(e) {
             e.preventDefault();
-            const btn = document.getElementById('save-food-btn');
-            btn.innerText = "সেভ হচ্ছে...";
-            btn.disabled = true;
-
             const newFood = {
                 id: Date.now(),
                 name: document.getElementById('food-name').value,
@@ -513,22 +488,16 @@
             };
 
             serverData.menu.push(newFood);
-            const ok = await updateCloudData();
+            saveData();
 
-            if (ok) {
-                alert("নতুন খাবার সফলভাবে ক্লাউডে সেভ হয়েছে এবং সবার মোবাইলে লাইভ আপডেট হয়ে গেছে!");
-                document.getElementById('menu-form').reset();
-            } else {
-                alert("সেভ করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
-            }
-            btn.innerText = "+ মেনুতে যুক্ত করুন";
-            btn.disabled = false;
+            alert("নতুন খাবার মেনুতে সফলভাবে যুক্ত হয়েছে!");
+            document.getElementById('menu-form').reset();
         }
 
-        async function deleteMenuItem(idx) {
+        function deleteMenuItem(idx) {
             if (confirm("এই খাবারটি মেনু থেকে ডিলিট করতে চান?")) {
                 serverData.menu.splice(idx, 1);
-                await updateCloudData();
+                saveData();
             }
         }
 
@@ -544,18 +513,18 @@
             history.slice().reverse().forEach(h => {
                 html += `<div style="border-bottom:1px solid #eee; padding:4px 0;"><strong>#${h.id} (${h.name} - ${h.table})</strong> - ৳${h.total} <br><span style="color:#666;">${h.items}</span></div>`;
             });
-            container.innerHTML = history.length ? html : '';
+            container.innerHTML = html;
         }
 
-        async function saveShopSettings(e) {
+        function saveShopSettings(e) {
             e.preventDefault();
             serverData.config = {
                 name: document.getElementById('set-shop-name').value,
                 tagline: document.getElementById('set-shop-tagline').value,
                 address: document.getElementById('set-shop-address').value
             };
-            const ok = await updateCloudData();
-            if (ok) alert("দোকানের নাম ও তথ্য সফলভাবে আপডেট হয়েছে!");
+            saveData();
+            alert("দোকানের নাম ও তথ্য সফলভাবে আপডেট হয়েছে!");
         }
 
         initSite();
