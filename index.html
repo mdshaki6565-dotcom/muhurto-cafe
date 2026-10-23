@@ -3,609 +3,793 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>মুহূর্ত-Cafe | প্রতিটি চুমুকে একটুকু মুহূর্ত।</title>
+    <title>মুহূর্ত-Cafe | প্রতিটি চুমুকে একটুকু মুহূর্ত</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff8f1',
+                            100: '#feecdc',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            800: '#9a3412',
+                            dark: '#0f172a'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Hind Siliguri', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --primary-brown: #3b2314;
-            --accent-gold: #c5a059;
-            --cream-bg: #fdfbf7;
-            --card-bg: #ffffff;
-            --text-dark: #2c2c2c;
-            --success-green: #27ae60;
-            --danger-red: #c0392b;
-            --wa-green: #25d366;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--cream-bg); color: var(--text-dark); padding: 8px; }
-        .container { max-width: 600px; margin: 0 auto; }
-
-        /* ক্যাফে হেডার */
-        .cafe-header {
-            text-align: center; background: var(--primary-brown); color: white;
-            padding: 15px; border-radius: 10px; margin-bottom: 10px;
-            border-bottom: 3px solid var(--accent-gold);
-        }
-        .cafe-header h1 { color: var(--accent-gold); font-size: 22px; margin-bottom: 4px; }
-        .tagline { font-style: italic; font-size: 13px; color: #e2d9c5; margin-bottom: 4px; }
-        .cafe-address { font-size: 11px; color: #ddd; }
-
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .admin-toggle-btn {
-            background: var(--primary-brown); color: var(--accent-gold);
-            border: 1px solid var(--accent-gold); padding: 6px 12px;
-            border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;
-        }
-
-        /* ক্যাটেগরি ট্যাব */
-        .category-tabs { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px; scrollbar-width: none; }
-        .tab-btn {
-            background: #fff; border: 1px solid var(--accent-gold); color: var(--primary-brown);
-            padding: 6px 12px; border-radius: 15px; font-size: 12px; cursor: pointer; white-space: nowrap; font-weight: bold;
-        }
-        .tab-btn.active { background: var(--primary-brown); color: var(--accent-gold); }
-
-        /* মেনু গ্রিড */
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 70px; }
-        @media (max-width: 400px) { .menu-grid { grid-template-columns: 1fr; } }
-
-        .food-card {
-            background: var(--card-bg); border-radius: 8px; overflow: hidden;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05); border: 1px solid #e2d9c5;
-            display: flex; flex-direction: column; justify-content: space-between;
-        }
-        .food-img { width: 100%; height: 120px; object-fit: cover; }
-        .food-info { padding: 8px; }
-        .food-title { font-size: 13px; font-weight: bold; color: var(--primary-brown); margin-bottom: 3px; }
-        .food-price { font-size: 13px; color: var(--success-green); font-weight: bold; margin-bottom: 6px; }
-        .add-btn {
-            width: 100%; background: var(--primary-brown); color: var(--accent-gold);
-            border: none; padding: 6px; border-radius: 5px; font-size: 11px; font-weight: bold; cursor: pointer;
-        }
-
-        /* কার্ট বার */
-        .cart-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%; background: var(--primary-brown);
-            color: white; padding: 10px 15px; display: flex; justify-content: space-between;
-            align-items: center; border-top: 3px solid var(--accent-gold); box-shadow: 0 -2px 10px rgba(0,0,0,0.2); z-index: 99;
-        }
-        .cart-btn { background: var(--accent-gold); color: var(--primary-brown); border: none; padding: 6px 14px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer; }
-
-        /* সাধারণ মডাল / পপআপ */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); z-index: 1000; overflow-y: auto; padding: 10px;
-        }
-        .modal-box {
-            max-width: 580px; margin: 10px auto; background: var(--card-bg);
-            border-radius: 10px; padding: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border-top: 4px solid var(--accent-gold);
-        }
-
-        .admin-header { display: flex; justify-content: space-between; align-items: center; background: var(--primary-brown); color: white; padding: 10px; border-radius: 6px; margin-bottom: 12px; }
-        .admin-header h3 { font-size: 14px; color: var(--accent-gold); }
-        .close-btn { background: var(--danger-red); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; }
-
-        /* ড্যাশবোর্ড ট্যাব */
-        .admin-tabs { display: flex; gap: 4px; margin-bottom: 12px; background: #eee; padding: 4px; border-radius: 6px; }
-        .admin-tab-btn { flex: 1; padding: 8px 4px; font-size: 11px; font-weight: bold; border: none; background: transparent; cursor: pointer; border-radius: 4px; text-align: center; }
-        .admin-tab-btn.active { background: var(--primary-brown); color: var(--accent-gold); }
-
-        .section-card { background: #fffdf9; border: 1px solid #e2d9c5; border-radius: 6px; padding: 10px; margin-bottom: 10px; }
-        .section-card h4 { font-size: 13px; color: var(--primary-brown); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-
-        /* সেলস সামারি কার্ড */
-        .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-        .report-card { background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 6px; text-align: center; }
-        .report-card div { font-size: 11px; color: #666; }
-        .report-card strong { font-size: 16px; color: var(--primary-brown); }
-
-        .order-card { background: #ffffff; border: 1px solid #d4c5a9; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 12px; }
-        
-        /* হোয়াটসঅ্যাপ বাটন স্টাইল */
-        .wa-actions { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; background: #f0fdf4; padding: 6px; border-radius: 5px; border: 1px solid #bbf7d0; }
-        .wa-btn {
-            background: var(--wa-green); color: white; border: none; padding: 5px 8px;
-            border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; text-align: left;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-
-        .order-actions { display: flex; gap: 5px; margin-top: 8px; }
-        .order-actions button { flex: 1; padding: 6px; font-size: 11px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; }
-        .btn-done { background: var(--success-green); color: white; }
-        .btn-del { background: var(--danger-red); color: white; }
-
-        .edit-item-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #eee; font-size: 12px; }
-
-        .form-group { margin-bottom: 8px; }
-        .form-group label { display: block; font-size: 11px; font-weight: bold; color: var(--primary-brown); margin-bottom: 2px; }
-        .form-group input, .form-group select { width: 100%; padding: 8px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px; }
-        .btn-save { background: var(--primary-brown); color: var(--accent-gold); border: none; padding: 9px; width: 100%; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer; margin-top: 5px; }
-        .badge { background: var(--accent-gold); color: var(--primary-brown); padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: bold; }
+        body { font-family: 'Hind Siliguri', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
 
-    <div class="container">
-        <!-- ডায়নামিক ক্যাফে হেডার -->
-        <header class="cafe-header">
-            <h1 id="disp-title">☕ মুহূর্ত-Cafe</h1>
-            <p class="tagline" id="disp-tagline">"প্রতিটি চুমুকে একটুকু মুহূর্ত।"</p>
-            <p class="cafe-address" id="disp-address">📍 গকুলনগর বাসস্ট্যান্ড, রায়পুরা, নরসিংদী</p>
-        </header>
-
-        <div class="top-bar">
-            <span style="font-size: 12px; font-weight: bold; color: #555;">গ্রাহক মেনু পেজ</span>
-            <button class="admin-toggle-btn" onclick="openAdminPanel()">⚙️ এডমিন প্যানেল</button>
-        </div>
-
-        <!-- ক্যাটেগরি ট্যাব -->
-        <div class="category-tabs">
-            <button class="tab-btn active" onclick="filterMenu('all', this)">সব</button>
-            <button class="tab-btn" onclick="filterMenu('চা ও গরম পানীয়', this)">চা ও গরম</button>
-            <button class="tab-btn" onclick="filterMenu('ফাস্ট ফুড', this)">ফাস্ট ফুড</button>
-            <button class="tab-btn" onclick="filterMenu('জুস', this)">জুস</button>
-            <button class="tab-btn" onclick="filterMenu('ফুচকা ও চাট', this)">ফুচকা</button>
-            <button class="tab-btn" onclick="filterMenu('হালকা খাবার ও ইত্যাদি', this)">হালকা খাবার</button>
-        </div>
-
-        <!-- মেনু আইটেম এলাকা -->
-        <div id="menu-container" class="menu-grid">
-            <p style="text-align: center; grid-column: span 2; color: #777; padding: 20px; font-size: 13px;">লাইভ মেনু লোড হচ্ছে...</p>
-        </div>
-    </div>
-
-    <!-- কার্ট বার -->
-    <div class="cart-bar">
-        <div>
-            <span id="cart-count">০টি আইটেম</span> | মোট: <span id="cart-total">৳০</span>
-        </div>
-        <button class="cart-btn" onclick="openCheckoutModal()">অর্ডার করুন ➔</button>
-    </div>
-
-    <!-- ১. কাস্টমার তথ্য নেওয়ার কাস্টম চেকআউট মডাল -->
-    <div id="checkout-modal" class="modal">
-        <div class="modal-box">
-            <div class="admin-header">
-                <h3>📝 আপনার তথ্য দিন (অর্ডার সম্পন্ন করতে)</h3>
-                <button class="close-btn" onclick="closeCheckoutModal()">✕</button>
+    <!-- Customer Header Section -->
+    <header class="bg-gradient-to-r from-amber-700 via-orange-600 to-amber-800 text-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="bg-white p-2 rounded-full shadow-md text-orange-600 text-2xl font-bold">
+                    ☕
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide" id="site-name-display">মুহূর্ত-Cafe</h1>
+                    <p class="text-xs text-amber-100 flex items-center gap-1">
+                        <i class="fa-solid fa-location-dot"></i> 
+                        <span id="site-address-display">গকুলনগর বাসস্ট্যান্ড, রায়পুরা, নরসিংদী</span>
+                    </p>
+                </div>
             </div>
-            <form onsubmit="submitCustomerOrder(event)">
-                <div class="form-group">
-                    <label>আপনার নাম:</label>
-                    <input type="text" id="cust-name" placeholder="যেমন: মো: শাকিল" required>
-                </div>
-                <div class="form-group">
-                    <label>মোবাইল নম্বর (SMS/WhatsApp নোটিফিকেশনের জন্য):</label>
-                    <input type="tel" id="cust-phone" placeholder="017XXXXXXXX" required>
-                </div>
-                <div class="form-group">
-                    <label>টেবিল নম্বর / পার্সেল:</label>
-                    <input type="text" id="cust-table" placeholder="যেমন: টেবিল নং ৪ (অথবা পার্সেল)" required>
-                </div>
-                <div style="background:#fdfbf7; padding:8px; border:1px solid #e2d9c5; border-radius:5px; margin:10px 0; font-size:12px;">
-                    <strong>অর্ডারের তালিকা:</strong> <span id="checkout-summary-items"></span><br>
-                    <strong>সর্বমোট দাম:</strong> <span id="checkout-summary-total" style="color:var(--success-green); font-weight:bold;"></span>
-                </div>
-                <button type="submit" class="btn-save" id="submit-order-btn">অর্ডার কনফার্ম করুন</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ২. এডমিন প্যানেল মডাল -->
-    <div id="admin-modal" class="modal">
-        <div class="modal-box">
             
-            <!-- পিন স্ক্রিন (পিন: 6565) -->
-            <div id="pin-screen" style="text-align: center; padding: 20px;">
-                <h3 style="color: var(--primary-brown); margin-bottom: 5px;">🔒 এডমিন কন্ট্রোল প্যানেল</h3>
-                <p style="font-size: 12px; color: #666; margin-bottom: 10px;">প্রবেশ করতে পিন কোড দিন</p>
-                <input type="password" id="pin-input" placeholder="••••" maxlength="4" style="width: 100%; padding: 10px; font-size: 18px; text-align: center; border: 2px solid #ccc; border-radius: 6px; margin: 10px 0;">
-                <button class="btn-save" onclick="verifyAdminPin()">প্রবেশ করুন</button>
-                <button style="background: #ccc; border:none; padding:6px; width:100%; border-radius:5px; margin-top:8px; font-size:11px; cursor:pointer;" onclick="closeAdminPanel()">বন্ধ করুন</button>
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <button onclick="openCartModal()" class="relative bg-white/20 hover:bg-white/30 p-2.5 rounded-full transition">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-orange-600">0</span>
+                </button>
+                <button onclick="openAdminModal()" class="bg-amber-950/60 hover:bg-black/80 text-xs px-3.5 py-2 rounded-xl font-medium border border-amber-300/30 transition flex items-center gap-1.5 shadow-md">
+                    <i class="fa-solid fa-user-shield text-amber-400"></i> এডমিন প্যানেল
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner Tagline -->
+    <section class="bg-amber-100 border-b border-amber-200 py-2 text-center text-amber-900 font-medium text-sm shadow-inner">
+        ✨ প্রতিটি চুমুকে একটুকু মুহূর্ত! ✨
+    </section>
+
+    <!-- Main Customer View Container -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- Search & Filter Bar -->
+        <div class="mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="relative w-full md:w-80">
+                <input type="text" id="search-input" oninput="handleSearch()" placeholder="খাবার খুঁজুন..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:outline-none shadow-sm text-sm">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-400"></i>
             </div>
 
-            <!-- মূল এডমিন ড্যাশবোর্ড -->
-            <div id="admin-dashboard" style="display: none;">
-                <div class="admin-header">
-                    <h3>☕ মুহূর্ত-Cafe এডমিন প্যানেল</h3>
-                    <button class="close-btn" onclick="closeAdminPanel()">বন্ধ করুন</button>
+            <!-- Categories Horizontal Scroll -->
+            <div id="category-bar" class="flex gap-2 overflow-x-auto w-full no-scrollbar py-1">
+                <!-- Categories dynamically loaded here -->
+            </div>
+        </div>
+
+        <!-- Menu Grid Header -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                <i class="fa-solid fa-utensils text-orange-600"></i>
+                <span id="current-category-title">সকল খাবার</span>
+            </h2>
+            <span id="item-count" class="text-xs text-gray-500 font-medium bg-gray-200 px-2.5 py-1 rounded-full">0 টি আইটেম</span>
+        </div>
+
+        <!-- Menu Food Grid -->
+        <div id="menu-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <!-- Dynamic Menu Items -->
+        </div>
+
+    </main>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 text-xs py-6 border-t border-gray-800 mt-auto">
+        <div class="max-w-6xl mx-auto px-4 text-center space-y-2">
+            <p class="text-gray-300 font-semibold text-sm">মুহূর্ত-Cafe</p>
+            <p id="footer-address">গকুলনগর বাসস্ট্যান্ড, রায়পুরা, নরসিংদী</p>
+            <p class="text-gray-500">© 2026 মুহূর্ত-Cafe. সর্বস্বত্ব সংরক্ষিত।</p>
+        </div>
+    </footer>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-end md:items-center justify-center p-0 md:p-4">
+        <div class="bg-white w-full max-w-lg rounded-t-2xl md:rounded-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-4 bg-orange-600 text-white flex justify-between items-center">
+                <h3 class="font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-bag-shopping"></i> আপনার অর্ডার সমূহ
+                </h3>
+                <button onclick="closeCartModal()" class="text-white hover:text-gray-200 text-xl font-bold">✕</button>
+            </div>
+
+            <div id="cart-items-container" class="p-4 overflow-y-auto flex-grow divide-y divide-gray-100">
+                <!-- Cart Items -->
+            </div>
+
+            <div class="p-4 bg-gray-50 border-t border-gray-200 space-y-3">
+                <div class="flex justify-between font-bold text-gray-800 text-base">
+                    <span>মোট টাকা:</span>
+                    <span id="cart-total">৳0</span>
                 </div>
 
-                <!-- এডমিন ন্যাভিগেশন ট্যাব -->
-                <div class="admin-tabs">
-                    <button class="admin-tab-btn active" onclick="switchAdminTab('live-orders', this)">📦 লাইভ অর্ডার</button>
-                    <button class="admin-tab-btn" onclick="switchAdminTab('menu-mgmt', this)">🍔 মেনু এডিট</button>
-                    <button class="admin-tab-btn" onclick="switchAdminTab('reports', this)">📊 হিসেব ও সেলস</button>
-                    <button class="admin-tab-btn" onclick="switchAdminTab('settings', this)">⚙️ সেটিং</button>
+                <!-- Customer Form -->
+                <div class="space-y-2 text-xs">
+                    <div>
+                        <label class="font-semibold text-gray-700">আপনার নাম:</label>
+                        <input type="text" id="cust-name" placeholder="নাম লিখুন" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-gray-700">মোবাইল নম্বর (জরুরি):</label>
+                        <input type="tel" id="cust-phone" placeholder="017XXXXXXXX" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-gray-700">টেবিল নির্বাচন করুন:</label>
+                        <select id="cust-table" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500">
+                            <!-- Tables -->
+                        </select>
+                    </div>
                 </div>
 
-                <!-- ১. লাইভ অর্ডার সেকশন -->
-                <div id="tab-live-orders" class="admin-tab-content">
-                    <div class="section-card">
-                        <h4>
-                            <span>📦 রিয়েল-টাইম লাইভ অর্ডার</span>
-                            <span class="badge" id="order-count">০টি প্যান্ডিং</span>
-                        </h4>
-                        <div id="orders-container" style="max-height: 320px; overflow-y: auto;">
-                            <p style="text-align: center; color: #777; font-size: 12px; padding: 10px;">কোনো প্যান্ডিং অর্ডার নেই...</p>
+                <button onclick="submitOrder()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2 text-sm">
+                    <i class="fa-solid fa-paper-plane"></i> অর্ডার কনফার্ম করুন
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FULL SCREEN MODERN ADMIN DASHBOARD OVERLAY -->
+    <div id="admin-modal" class="fixed inset-0 bg-slate-950 z-50 hidden flex flex-col overflow-hidden">
+        
+        <!-- Admin Login Overlay Box -->
+        <div id="admin-login-box" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+            <div class="p-8 text-center space-y-6 max-w-md w-full bg-slate-900 rounded-3xl border border-slate-800 shadow-2xl">
+                <div class="w-20 h-20 bg-orange-600/20 text-orange-500 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner border border-orange-500/30">
+                    <i class="fa-solid fa-user-gear"></i>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-white tracking-wide">এডমিন ড্যাশবোর্ড</h3>
+                    <p class="text-xs text-slate-400 mt-1">পাসওয়ার্ড দিয়ে সিস্টেমে প্রবেশ করুন</p>
+                </div>
+                <input type="password" id="admin-pin" placeholder="••••••••" class="w-full p-4 bg-slate-950 border border-slate-800 text-white rounded-2xl text-center text-2xl tracking-widest focus:outline-none focus:border-orange-500 transition shadow-inner">
+                <button onclick="checkAdminPin()" class="w-full bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white py-3.5 rounded-2xl font-bold transition shadow-lg text-sm">প্রবেশ করুন</button>
+                <button onclick="closeAdminModal()" class="text-xs text-slate-500 hover:text-slate-300 transition">বাতিল করে ওয়েবসাইটে ফিরে যান</button>
+            </div>
+        </div>
+
+        <!-- Fullscreen Admin Control Center -->
+        <div id="admin-dashboard" class="hidden flex flex-col md:flex-row h-full w-full bg-slate-950 text-slate-100 overflow-hidden">
+            
+            <!-- Left Sidebar Navigation -->
+            <aside class="w-full md:w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0">
+                <div>
+                    <!-- Sidebar Header -->
+                    <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-orange-600 text-white p-2.5 rounded-xl shadow-lg text-lg font-bold">
+                                ☕
+                            </div>
+                            <div>
+                                <h2 class="font-bold text-sm text-white leading-tight">মুহূর্ত-Cafe POS</h2>
+                                <p class="text-[10px] text-green-400 flex items-center gap-1 mt-0.5">
+                                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> সিংক একটিভ
+                                </p>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Sidebar Links -->
+                    <nav class="p-3 space-y-1.5 text-xs font-medium">
+                        <button onclick="switchAdminTab('orders')" id="tab-btn-orders" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-600 text-white font-bold transition shadow-md">
+                            <i class="fa-solid fa-bell text-sm"></i> লাইভ অর্ডারসমূহ
+                        </button>
+                        <button onclick="switchAdminTab('menu')" id="tab-btn-menu" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+                            <i class="fa-solid fa-utensils text-sm"></i> খাবার ম্যানুয়াল
+                        </button>
+                        <button onclick="switchAdminTab('settings')" id="tab-btn-settings" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+                            <i class="fa-solid fa-gear text-sm"></i> ক্যাফে সেটিংস
+                        </button>
+                    </nav>
                 </div>
 
-                <!-- ২. মেনু ম্যানেজমেন্ট (খাবার যোগ, এডিট ও ডিলিট) -->
-                <div id="tab-menu-mgmt" class="admin-tab-content" style="display: none;">
-                    <div class="section-card">
-                        <h4>➕ নতুন খাবার যোগ করুন</h4>
-                        <form id="menu-form" onsubmit="addNewFood(event)">
-                            <div class="form-group"><label>খাবারের নাম:</label><input type="text" id="food-name" placeholder="যেমন: কোল্ড কফি" required></div>
-                            <div class="form-group"><label>দাম (৳):</label><input type="number" id="food-price" placeholder="যেমন: ৫০" required></div>
-                            <div class="form-group">
-                                <label>ক্যাটেগরি:</label>
-                                <select id="food-category">
-                                    <option value="চা ও গরম পানীয়">চা ও গরম পানীয়</option>
-                                    <option value="ফাস্ট ফুড">ফাস্ট ফুড</option>
-                                    <option value="জুস">জুস</option>
-                                    <option value="ফুচকা ও চাট">ফুচকা ও চাট</option>
-                                    <option value="হালকা খাবার ও ইত্যাদি">হালকা খাবার ও ইত্যাদি</option>
-                                </select>
+                <!-- Sidebar Footer Exit Button -->
+                <div class="p-4 border-t border-slate-800">
+                    <button onclick="closeAdminModal()" class="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 py-2.5 rounded-xl text-xs font-semibold transition border border-slate-700">
+                        <i class="fa-solid fa-right-from-bracket"></i> সাইটে ফিরে যান
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <div class="flex-grow flex flex-col h-full overflow-hidden bg-slate-950">
+                
+                <!-- Top Header Info Bar -->
+                <header class="p-4 bg-slate-900/60 border-b border-slate-800 flex justify-between items-center">
+                    <h3 id="admin-panel-title" class="font-bold text-base text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-orange-500"></i> ড্যাশবোর্ড ওভারভিউ
+                    </h3>
+                    <button onclick="loadCloudData()" class="text-xs text-orange-400 bg-orange-950/60 hover:bg-orange-900/60 px-3.5 py-2 rounded-xl border border-orange-800/60 transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-rotate"></i> লাইভ ডাটা সিংক
+                    </button>
+                </header>
+
+                <!-- Modern Analytics Summary Cards -->
+                <div class="grid grid-cols-3 gap-3 p-4 bg-slate-900/30 border-b border-slate-800/80 text-xs">
+                    <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 shadow-md">
+                        <p class="text-slate-400 font-medium">মোট অর্ডার</p>
+                        <p class="text-2xl font-black text-orange-400 mt-1" id="stat-total-orders">0</p>
+                    </div>
+                    <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 shadow-md">
+                        <p class="text-slate-400 font-medium">মোট বিক্রি</p>
+                        <p class="text-2xl font-black text-emerald-400 mt-1" id="stat-total-sales">৳0</p>
+                    </div>
+                    <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 shadow-md">
+                        <p class="text-slate-400 font-medium">পেন্ডিং অর্ডার</p>
+                        <p class="text-2xl font-black text-amber-400 mt-1" id="stat-pending-orders">0</p>
+                    </div>
+                </div>
+
+                <!-- Admin Tab Scrollable Content -->
+                <div class="p-4 md:p-6 overflow-y-auto flex-grow text-slate-200 space-y-6">
+
+                    <!-- TAB 1: ORDERS -->
+                    <div id="admin-tab-orders" class="space-y-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-800">
+                            <span class="font-bold text-sm text-slate-200 flex items-center gap-2">
+                                <i class="fa-solid fa-filter text-orange-500"></i> ফিল্টার কাস্টমাইজেশন
+                            </span>
+                            <select id="order-filter-status" onchange="renderAdminOrders()" class="bg-slate-950 border border-slate-700 text-xs text-slate-200 rounded-xl p-2.5 focus:outline-none w-full sm:w-auto">
+                                <option value="all">সকল অর্ডার</option>
+                                <option value="নতুন অর্ডার">নতুন অর্ডার</option>
+                                <option value="রেডি হচ্ছে">রেডি হচ্ছে</option>
+                                <option value="পরিবেশন সম্পন্ন">পরিবেশন সম্পন্ন</option>
+                                <option value="বিল পরিশোধিত">বিল পরিশোধিত</option>
+                            </select>
+                        </div>
+
+                        <div id="admin-orders-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Orders dynamically rendered -->
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: MENU MANAGEMENT -->
+                    <div id="admin-tab-menu" class="hidden space-y-6">
+                        <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4 shadow-xl">
+                            <h4 class="font-bold text-orange-400 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-plus-circle"></i> নতুন খাবার যোগ করুন
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                                <div>
+                                    <label class="block mb-1 text-slate-400">খাবারের নাম:</label>
+                                    <input type="text" id="add-name" placeholder="যেমন: স্পেশাল কফি" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:border-orange-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block mb-1 text-slate-400">দাম (৳):</label>
+                                    <input type="number" id="add-price" placeholder="যেমন: ৩০" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:border-orange-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block mb-1 text-slate-400">ক্যাটাগরি:</label>
+                                    <select id="add-cat" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:border-orange-500 focus:outline-none">
+                                        <option value="ফাস্টফুড">ফাস্টফুড</option>
+                                        <option value="ফুচকা ও চাট">ফুচকা ও চাট</option>
+                                        <option value="ফ্রেশ জুস">ফ্রেশ জুস</option>
+                                        <option value="হালকা খাবার">হালকা খাবার</option>
+                                        <option value="কম্বো অফার">কম্বো অফার</option>
+                                        <option value="চা ও গরম পানীয়">চা ও গরম পানীয়</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block mb-1 text-slate-400">ইমেজ লিংক (ImgBB Photo Link):</label>
+                                    <input type="text" id="add-img-url" placeholder="https://i.ibb.co/..." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:border-orange-500 focus:outline-none">
+                                </div>
                             </div>
-                            <div class="form-group"><label>ছবির Direct Link (PostImages থেকে):</label><input type="url" id="food-image" placeholder="https://i.postimg.cc/..." required></div>
-                            <button type="submit" class="btn-save" id="save-food-btn">+ মেনুতে যুক্ত করুন</button>
-                        </form>
+                            <button onclick="addNewFoodItem()" class="bg-gradient-to-r from-orange-600 to-amber-600 text-white text-xs px-6 py-3 rounded-xl font-bold hover:opacity-90 transition shadow-lg flex items-center gap-2">
+                                <i class="fa-solid fa-floppy-disk"></i> খাবার সেভ করুন
+                            </button>
+                        </div>
+
+                        <div id="admin-menu-items-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <!-- Existing Food Items -->
+                        </div>
                     </div>
 
-                    <div class="section-card">
-                        <h4>📝 বর্তমান খাবার তালিকা (মুছতে 'ডিলিট' চাপুন)</h4>
-                        <div id="existing-menu-list" style="max-height: 200px; overflow-y: auto;"></div>
+                    <!-- TAB 3: SETTINGS -->
+                    <div id="admin-tab-settings" class="hidden space-y-4">
+                        <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4 text-xs shadow-xl max-w-2xl">
+                            <h4 class="font-bold text-orange-400 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-sliders"></i> ক্যাফে তথ্য কাস্টমাইজেশন
+                            </h4>
+                            <div>
+                                <label class="block mb-1 text-slate-400 font-semibold">ক্যাফের নাম:</label>
+                                <input type="text" id="setting-name" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:border-orange-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block mb-1 text-slate-400 font-semibold">ঠিকানা:</label>
+                                <input type="text" id="setting-address" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:border-orange-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block mb-1 text-slate-400 font-semibold">টেবিল তালিকা (কমা দিয়ে লিখুন):</label>
+                                <input type="text" id="setting-tables" placeholder="টেবিল ১, টেবিল ২, টেবিল ৩" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:border-orange-500 focus:outline-none">
+                            </div>
+                            <button onclick="saveSiteSettings()" class="bg-orange-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-700 transition shadow-md">
+                                সেটিংস আপডেট করুন
+                            </button>
+                        </div>
                     </div>
+
                 </div>
-
-                <!-- ৩. সেলস রিপোর্ট (হিসেব) -->
-                <div id="tab-reports" class="admin-tab-content" style="display: none;">
-                    <div class="report-grid">
-                        <div class="report-card"><div>মোট কমপ্লিট অর্ডার</div><strong id="rep-total-orders">০টি</strong></div>
-                        <div class="report-card"><div>মোট মোট বিক্রি (ক্যাশ)</div><strong id="rep-total-sales">৳০</strong></div>
-                    </div>
-                    <div class="section-card">
-                        <h4>📜 সম্পন্ন হওয়া অর্ডারের ইতিহাস</h4>
-                        <div id="history-container" style="max-height: 220px; overflow-y: auto; font-size: 11px;"></div>
-                    </div>
-                </div>
-
-                <!-- ৪. শপ সেটিং -->
-                <div id="tab-settings" class="admin-tab-content" style="display: none;">
-                    <div class="section-card">
-                        <h4>⚙️ দোকানের নাম ও ঠিকানা আপডেট করুন</h4>
-                        <form onsubmit="saveShopSettings(event)">
-                            <div class="form-group"><label>দোকানের নাম:</label><input type="text" id="set-shop-name" required></div>
-                            <div class="form-group"><label>ট্যাগলাইন:</label><input type="text" id="set-shop-tagline" required></div>
-                            <div class="form-group"><label>ঠিকানা:</label><input type="text" id="set-shop-address" required></div>
-                            <button type="submit" class="btn-save">সেভ করুন</button>
-                        </form>
-                    </div>
-                </div>
-
             </div>
 
         </div>
     </div>
-
+    <!-- JavaScript Logic -->
     <script>
-        const BIN_ID = '679a8e03e41b4d34e4811a2d';
+        // Cloud Sync Configurations
+        const BIN_ID = '6ad61d97ffd5d1605378d224';
         const API_KEY = '$2a$10$dqSR9ocLraNLKmig9LGam.zAL3xU1VkOoQAeqjEbSNDEpBSHLeCe6';
-        const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+        
+        // Secret Admin PIN Code (6565)
+        const ADMIN_SECRET_PIN = "6565";
 
-        let serverData = { config: {}, menu: [], orders: [], history: [] };
+        // Initial System Data
+        let appData = {
+            siteName: "মুহূর্ত-Cafe",
+            address: "গকুলনগর বাসস্ট্যান্ড, রায়পুরা, নরসিংদী",
+            tables: ["টেবিল ১", "টেবিল ২", "টেবিল ৩", "টেবিল ৪", "পার্সেল"],
+            categories: ["সবগুলো", "ফাস্টফুড", "ফুচকা ও চাট", "ফ্রেশ জুস", "হালকা খাবার", "কম্বো অফার", "চা ও গরম পানীয়"],
+            menu: [
+                { id: 1, name: "রেগুলার দুধ চা", price: 15, category: "চা ও গরম পানীয়", img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=300" },
+                { id: 2, name: "স্পেশাল ফুচকা", price: 60, category: "ফুচকা ও চাট", img: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=300" },
+                { id: 3, name: "চিকেন বার্গার", price: 120, category: "ফাস্টফুড", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300" },
+                { id: 4, name: "ফ্রেশ অরেঞ্জ জুস", price: 80, category: "ফ্রেশ জুস", img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=300" }
+            ],
+            orders: []
+        };
+
         let cart = [];
+        let activeCategory = "সবগুলো";
 
-        // অ্যাপ লোড
-        async function initSite() {
-            await fetchCloudData();
-            // রিয়েল-টাইম লাইভ সিংক (প্রতি ২.৫ সেকেন্ডে ডাটা সেভ/আপডেট হবে)
-            setInterval(fetchCloudData, 2500);
-        }
+        // DOM Initialization
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadCloudData();
+            renderCategoryBar();
+            renderMenuGrid();
+            updateHeaderAndFooter();
+        });
 
-        async function fetchCloudData() {
+        // Cloud Load & Save
+        async function loadCloudData() {
             try {
-                const res = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
                 const data = await res.json();
-                serverData = data.record || { config: {}, menu: [], orders: [], history: [] };
-
-                if (!serverData.config) serverData.config = { name: "☕ মুহূর্ত-Cafe", tagline: '"প্রতিটি চুমুকে একটুকু মুহূর্ত।"', address: "📍 গকুলনগর বাসস্ট্যান্ড, রায়পুরা, নরসিংদী" };
-                if (!serverData.history) serverData.history = [];
-
-                applyShopConfig();
-                renderCustomerMenu(serverData.menu || []);
-                
-                if (document.getElementById('admin-dashboard').style.display === 'block') {
-                    renderLiveOrders(serverData.orders || []);
-                    renderMenuManagementList(serverData.menu || []);
-                    renderSalesReport();
+                if (data.record) {
+                    if(data.record.menu) appData.menu = data.record.menu;
+                    if(data.record.address) appData.address = data.record.address;
+                    if(data.record.siteName) appData.siteName = data.record.siteName;
+                    if(data.record.tables) appData.tables = data.record.tables;
+                    if(data.record.orders) appData.orders = data.record.orders;
+                    
+                    renderCategoryBar();
+                    renderMenuGrid();
+                    updateHeaderAndFooter();
+                    if(!document.getElementById('admin-dashboard').classList.contains('hidden')) {
+                        renderAdminOrders();
+                        renderAdminMenuList();
+                        updateAdminAnalytics();
+                    }
                 }
-            } catch (e) { console.error("Sync error..."); }
+            } catch (err) {
+                console.error("Cloud fetch error:", err);
+            }
         }
 
-        function applyShopConfig() {
-            document.getElementById('disp-title').innerText = serverData.config.name || "☕ মুহূর্ত-Cafe";
-            document.getElementById('disp-tagline').innerText = serverData.config.tagline || "";
-            document.getElementById('disp-address').innerText = serverData.config.address || "";
+        async function saveCloudData() {
+            try {
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify(appData)
+                });
+            } catch (err) {
+                console.error("Cloud save error:", err);
+            }
         }
 
-        function renderCustomerMenu(items) {
-            const container = document.getElementById('menu-container');
-            if (items.length === 0) {
-                container.innerHTML = `<p style="text-align:center; grid-column:span 2; color:#777; font-size:12px;">কোনো খাবার যুক্ত নেই।</p>`;
+        // Render UI Elements
+        function updateHeaderAndFooter() {
+            document.getElementById('site-name-display').innerText = appData.siteName;
+            document.getElementById('site-address-display').innerText = appData.address;
+            document.getElementById('footer-address').innerText = appData.address;
+            
+            const tableSelect = document.getElementById('cust-table');
+            tableSelect.innerHTML = appData.tables.map(t => `<option value="${t}">${t}</option>`).join('');
+        }
+
+        function renderCategoryBar() {
+            const bar = document.getElementById('category-bar');
+            bar.innerHTML = appData.categories.map(cat => `
+                <button onclick="setCategory('${cat}')" class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition ${activeCategory === cat ? 'bg-orange-600 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}">
+                    ${cat}
+                </button>
+            `).join('');
+        }
+
+        function setCategory(cat) {
+            activeCategory = cat;
+            document.getElementById('current-category-title').innerText = cat;
+            renderCategoryBar();
+            renderMenuGrid();
+        }
+
+        function renderMenuGrid(searchQuery = "") {
+            const grid = document.getElementById('menu-grid');
+            let filtered = appData.menu;
+
+            if (activeCategory !== "সবগুলো") {
+                filtered = filtered.filter(item => item.category === activeCategory);
+            }
+
+            if (searchQuery) {
+                filtered = filtered.filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
+            }
+
+            document.getElementById('item-count').innerText = `${filtered.length} টি আইটেম`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-10 text-gray-400">কোনো খাবার পাওয়া যায়নি</div>`;
                 return;
             }
-            let html = '';
-            items.forEach(item => {
-                html += `
-                    <div class="food-card">
-                        <img src="${item.image}" class="food-img" onerror="this.src='https://i.postimg.cc/44Yw3V28/placeholder.png'">
-                        <div class="food-info">
-                            <div class="food-title">${item.name}</div>
-                            <div class="food-price">৳${item.price}</div>
-                            <button class="add-btn" onclick="addToCart('${item.name}', ${item.price})">+ অর্ডারে যোগ</button>
+
+            grid.innerHTML = filtered.map(item => `
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition">
+                    <img src="${item.img || 'https://via.placeholder.com/150'}" class="w-full h-28 md:h-36 object-cover" alt="${item.name}">
+                    <div class="p-3 flex-grow flex flex-col justify-between space-y-2">
+                        <div>
+                            <span class="text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5 rounded font-medium">${item.category}</span>
+                            <h3 class="font-bold text-gray-800 text-xs md:text-sm mt-1 leading-snug line-clamp-1">${item.name}</h3>
+                        </div>
+                        <div class="flex justify-between items-center pt-2 border-t border-gray-50">
+                            <span class="font-bold text-orange-600 text-sm">৳${item.price}</span>
+                            <button onclick="addToCart(${item.id})" class="bg-orange-600 text-white p-1.5 px-2.5 rounded-lg text-xs font-bold hover:bg-orange-700 transition flex items-center gap-1">
+                                + যোগ
+                            </button>
                         </div>
                     </div>
-                `;
-            });
-            container.innerHTML = html;
+                </div>
+            `).join('');
         }
 
-        function filterMenu(cat, btn) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            if (cat === 'all') renderCustomerMenu(serverData.menu);
-            else renderCustomerMenu(serverData.menu.filter(i => i.category === cat));
+        function handleSearch() {
+            const query = document.getElementById('search-input').value;
+            renderMenuGrid(query);
         }
 
-        function addToCart(name, price) {
-            cart.push({ name, price });
-            document.getElementById('cart-count').innerText = `${cart.length}টি আইটেম`;
-            const total = cart.reduce((s, i) => s + i.price, 0);
+        // Cart Logic
+        function addToCart(id) {
+            const item = appData.menu.find(m => m.id === id);
+            const exist = cart.find(c => c.id === id);
+            if (exist) {
+                exist.qty += 1;
+            } else {
+                cart.push({ ...item, qty: 1 });
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const count = cart.reduce((sum, item) => sum + item.qty, 0);
+            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            document.getElementById('cart-count').innerText = count;
             document.getElementById('cart-total').innerText = `৳${total}`;
+
+            const container = document.getElementById('cart-items-container');
+            if (cart.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-400 py-6">ঝুড়ি খালি রয়েছে</p>`;
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="py-2 flex justify-between items-center text-xs">
+                    <div>
+                        <p class="font-bold text-gray-800">${item.name}</p>
+                        <p class="text-gray-500">৳${item.price} x ${item.qty}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="changeQty(${item.id}, -1)" class="w-6 h-6 bg-gray-200 rounded font-bold">-</button>
+                        <span>${item.qty}</span>
+                        <button onclick="changeQty(${item.id}, 1)" class="w-6 h-6 bg-gray-200 rounded font-bold">+</button>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        function openCheckoutModal() {
-            if (cart.length === 0) return alert("প্রথমে মেনু থেকে খাবার পছন্দ করুন!");
-            document.getElementById('checkout-summary-items').innerText = cart.map(i => i.name).join(', ');
-            document.getElementById('checkout-summary-total').innerText = `৳${cart.reduce((s, i) => s + i.price, 0)}`;
-            document.getElementById('checkout-modal').style.display = 'block';
+        function changeQty(id, delta) {
+            const item = cart.find(c => c.id === id);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) {
+                    cart = cart.filter(c => c.id !== id);
+                }
+            }
+            updateCartUI();
         }
 
-        function closeCheckoutModal() {
-            document.getElementById('checkout-modal').style.display = 'none';
-        }
+        function openCartModal() { document.getElementById('cart-modal').classList.remove('hidden'); }
+        function closeCartModal() { document.getElementById('cart-modal').classList.add('hidden'); }
 
-        async function submitCustomerOrder(e) {
-            e.preventDefault();
-            const btn = document.getElementById('submit-order-btn');
-            btn.innerText = "অর্ডার পাঠানো হচ্ছে...";
-            btn.disabled = true;
-
-            const name = document.getElementById('cust-name').value;
-            const phone = document.getElementById('cust-phone').value;
+        async function submitOrder() {
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
             const table = document.getElementById('cust-table').value;
-            const itemsDesc = cart.map(i => `${i.name} (৳${i.price})`).join(', ');
-            const totalAmount = cart.reduce((s, i) => s + i.price, 0);
+
+            if (!name || !phone) {
+                alert('অনুগ্রহ করে নাম এবং মোবাইল নম্বর দিন!');
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert('ঝুড়ি খালি!');
+                return;
+            }
 
             const newOrder = {
-                id: Math.floor(100 + Math.random() * 900),
-                name: name,
-                phone: phone,
-                table: table,
-                items: itemsDesc,
-                total: totalAmount,
+                id: Date.now(),
+                name,
+                phone,
+                table,
+                items: [...cart],
+                total: cart.reduce((s, i) => s + (i.price * i.qty), 0),
+                status: 'নতুন অর্ডার',
                 time: new Date().toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' })
             };
 
-            if (!serverData.orders) serverData.orders = [];
-            serverData.orders.push(newOrder);
+            appData.orders.unshift(newOrder);
+            await saveCloudData();
 
-            const ok = await updateCloudData();
-            if (ok) {
-                alert(`ধন্যবাদ ${name}! আপনার অর্ডারটি ক্যাফেতে সফলভাবে পাঠানো হয়েছে।`);
-                cart = [];
-                document.getElementById('cart-count').innerText = `০টি আইটেম`;
-                document.getElementById('cart-total').innerText = `৳০`;
-                closeCheckoutModal();
+            cart = [];
+            updateCartUI();
+            closeCartModal();
+            alert('ধন্যবাদ! আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে।');
+        }
+
+        // Admin Management Logic
+        function openAdminModal() { 
+            document.getElementById('admin-modal').classList.remove('hidden');
+            document.getElementById('admin-pin').value = '';
+        }
+        function closeAdminModal() { 
+            document.getElementById('admin-modal').classList.add('hidden');
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('admin-login-box').classList.remove('hidden');
+        }
+
+        function checkAdminPin() {
+            const pin = document.getElementById('admin-pin').value;
+            if (pin === ADMIN_SECRET_PIN) {
+                document.getElementById('admin-login-box').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                renderAdminOrders();
+                renderAdminMenuList();
+                loadSettingInputs();
+                updateAdminAnalytics();
             } else {
-                alert("নেটওয়ার্ক সমস্যা! আবার চেষ্টা করুন।");
+                alert('ভুল পিন পাসওয়ার্ড!');
             }
-            btn.innerText = "অর্ডার কনফার্ম করুন";
-            btn.disabled = false;
         }
 
-        /* --- এডমিন কন্ট্রোল --- */
-        function openAdminPanel() {
-            document.getElementById('admin-modal').style.display = 'block';
-            document.getElementById('pin-screen').style.display = 'block';
-            document.getElementById('admin-dashboard').style.display = 'none';
+        function updateAdminAnalytics() {
+            const totalOrders = appData.orders.length;
+            const totalSales = appData.orders.reduce((sum, o) => sum + (o.total || 0), 0);
+            const pending = appData.orders.filter(o => o.status !== 'বিল পরিশোধিত').length;
+
+            document.getElementById('stat-total-orders').innerText = totalOrders;
+            document.getElementById('stat-total-sales').innerText = `৳${totalSales}`;
+            document.getElementById('stat-pending-orders').innerText = pending;
         }
 
-        function closeAdminPanel() { document.getElementById('admin-modal').style.display = 'none'; }
+        function switchAdminTab(tab) {
+            ['orders', 'menu', 'settings'].forEach(t => {
+                document.getElementById(`admin-tab-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).classList.remove('bg-orange-600', 'text-white', 'font-bold', 'shadow-md');
+                document.getElementById(`tab-btn-${t}`).classList.add('text-slate-400');
+            });
 
-        function verifyAdminPin() {
-            if (document.getElementById('pin-input').value === '6565') {
-                document.getElementById('pin-screen').style.display = 'none';
-                document.getElementById('admin-dashboard').style.display = 'block';
-                document.getElementById('set-shop-name').value = serverData.config.name || '';
-                document.getElementById('set-shop-tagline').value = serverData.config.tagline || '';
-                document.getElementById('set-shop-address').value = serverData.config.address || '';
-                fetchCloudData();
-            } else { alert("ভুল পিন কোড!"); }
+            document.getElementById(`admin-tab-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tab}`).classList.add('bg-orange-600', 'text-white', 'font-bold', 'shadow-md');
+            document.getElementById(`tab-btn-${tab}`).classList.remove('text-slate-400');
+
+            const titles = {
+                orders: '<i class="fa-solid fa-bell text-orange-500"></i> লাইভ অর্ডার ম্যানেজমেন্ট',
+                menu: '<i class="fa-solid fa-utensils text-orange-500"></i> ডিজিটাল মেনু কাস্টমাইজেশন',
+                settings: '<i class="fa-solid fa-gear text-orange-500"></i> ক্যাফে জেনারেল সেটিংস'
+            };
+            document.getElementById('admin-panel-title').innerHTML = titles[tab];
         }
 
-        function switchAdminTab(tabName, btn) {
-            document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.admin-tab-content').forEach(c => c.style.display = 'none');
-            btn.classList.add('active');
-            document.getElementById(`tab-${tabName}`).style.display = 'block';
-        }
+        function renderAdminOrders() {
+            const container = document.getElementById('admin-orders-list');
+            const filter = document.getElementById('order-filter-status').value;
 
-        function renderLiveOrders(orders) {
-            const container = document.getElementById('orders-container');
-            document.getElementById('order-count').innerText = `${orders.length}টি প্যান্ডিং`;
-            if (orders.length === 0) return container.innerHTML = `<p style="text-align:center; color:#777; font-size:12px; padding:10px;">কোনো প্যান্ডিং অর্ডার নেই...</p>`;
+            let filteredOrders = appData.orders;
+            if (filter !== 'all') {
+                filteredOrders = filteredOrders.filter(o => o.status === filter);
+            }
 
-            let html = '';
-            orders.slice().reverse().forEach((ord, index) => {
-                const realIdx = orders.length - 1 - index;
-                html += `
-                    <div class="order-card">
-                        <div style="display:flex; justify-content:space-between; font-weight:bold; color:var(--primary-brown);">
-                            <span>অর্ডার #${ord.id} - ${ord.name || 'কাস্টমার'}</span>
-                            <span>⏰ ${ord.time}</span>
+            if (filteredOrders.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center text-slate-500 py-10 text-xs">কোনো অর্ডার পাওয়া যায়নি</div>`;
+                return;
+            }
+
+            container.innerHTML = filteredOrders.map(o => `
+                <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3 text-xs shadow-lg">
+                    <div class="flex justify-between items-start border-b border-slate-800 pb-3">
+                        <div>
+                            <span class="font-bold text-slate-100 text-sm">${o.name} <span class="text-orange-400 font-normal">(${o.table})</span></span>
+                            <p class="text-slate-400 mt-0.5"><i class="fa-solid fa-phone text-[10px]"></i> ${o.phone} • ${o.time}</p>
                         </div>
-                        <div style="font-size:11px; color:#555; margin:2px 0;">📱 ${ord.phone || 'নম্বর নাই'} | 📍 ${ord.table || 'টেবিল নাই'}</div>
-                        <div style="margin:4px 0; background:#fdfbf7; padding:4px; border-radius:4px;">${ord.items}</div>
-                        <div style="color:var(--success-green); font-weight:bold;">মোট বিল: ৳${ord.total}</div>
+                        <div class="flex flex-col items-end gap-1">
+                            <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold ${getStatusBadgeClass(o.status)}">${o.status}</span>
+                            <button onclick="deleteOrder(${o.id})" class="text-red-400 hover:text-red-300 text-[10px] mt-1"><i class="fa-solid fa-trash-can"></i> ডিলিট</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1 text-slate-300 bg-slate-950 p-2.5 rounded-xl border border-slate-800/80">
+                        ${o.items.map(i => `<div class="flex justify-between"><span>• ${i.name} x ${i.qty}</span> <span class="font-semibold text-slate-400">৳${i.price * i.qty}</span></div>`).join('')}
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-800 flex flex-col justify-between items-start gap-2 font-bold">
+                        <span class="text-amber-400 text-sm">মোট বিল: ৳${o.total}</span>
                         
-                        <!-- মেসেজ পাঠানো ১-ক্লিক বাটন -->
-                        <div class="wa-actions">
-                            <button class="wa-btn" onclick="sendWAMessage('${ord.phone}', '${ord.name}', 'confirm')">
-                                💬 ১. অর্ডার কনফার্মেশন মেসেজ
-                            </button>
-                            <button class="wa-btn" onclick="sendWAMessage('${ord.phone}', '${ord.name}', 'ready')">
-                                🍕 ২. খাবার রেডি ও পৌঁছানোর মেসেজ
-                            </button>
-                            <button class="wa-btn" onclick="sendWAMessage('${ord.phone}', '${ord.name}', 'paid')">
-                                🧾 ৩. বিল পরিশোধ ও ধন্যবাদ মেসেজ
-                            </button>
-                        </div>
+                        <div class="flex flex-wrap items-center gap-1.5 w-full">
+                            <select onchange="updateOrderStatus(${o.id}, this.value)" class="bg-slate-950 border border-slate-700 text-[11px] text-slate-200 rounded-lg px-2 py-1 focus:outline-none flex-grow">
+                                <option value="নতুন অর্ডার" ${o.status === 'নতুন অর্ডার' ? 'selected' : ''}>নতুন অর্ডার</option>
+                                <option value="রেডি হচ্ছে" ${o.status === 'রেডি হচ্ছে' ? 'selected' : ''}>রেডি হচ্ছে</option>
+                                <option value="পরিবেশন সম্পন্ন" ${o.status === 'পরিবেশন সম্পন্ন' ? 'selected' : ''}>পরিবেশন সম্পন্ন</option>
+                                <option value="বিল পরিশোধিত" ${o.status === 'বিল পরিশোধিত' ? 'selected' : ''}>বিল পরিশোধিত</option>
+                            </select>
 
-                        <div class="order-actions">
-                            <button class="btn-done" onclick="completeOrder(${realIdx})">✓ কমপ্লিট করুন</button>
-                            <button class="btn-del" onclick="deleteOrder(${realIdx})">✕ বাতিল</button>
+                            <button onclick="sendSMS('${o.phone}', 'ready')" class="bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/30 px-2 py-1 rounded-lg text-[10px] transition">রেডি SMS</button>
+                            <button onclick="sendSMS('${o.phone}', 'served')" class="bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 px-2 py-1 rounded-lg text-[10px] transition">পরিবেশন SMS</button>
+                            <button onclick="sendSMS('${o.phone}', 'paid')" class="bg-purple-600/20 hover:bg-purple-600 text-purple-400 hover:text-white border border-purple-500/30 px-2 py-1 rounded-lg text-[10px] transition">বিল SMS</button>
                         </div>
                     </div>
-                `;
-            });
-            container.innerHTML = html;
+                </div>
+            `).join('');
         }
 
-        // হোয়াটসঅ্যাপ অটো-মেসেজ লজিক
-        function sendWAMessage(phone, name, type) {
-            if (!phone) return alert("কাস্টমারের ফোন নম্বর পাওয়া যায়নি!");
-            
-            let cleanPhone = phone.replace(/[^0-9]/g, '');
-            if (cleanPhone.startsWith('0')) cleanPhone = '88' + cleanPhone;
+        function getStatusBadgeClass(status) {
+            switch(status) {
+                case 'নতুন অর্ডার': return 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
+                case 'রেডি হচ্ছে': return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
+                case 'পরিবেশন সম্পন্ন': return 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+                case 'বিল পরিশোধিত': return 'bg-purple-500/20 text-purple-400 border border-purple-500/30';
+                default: return 'bg-slate-800 text-slate-300';
+            }
+        }
 
-            let msg = '';
-            if (type === 'confirm') {
-                msg = `প্রিয় ${name}, মুহূর্ত-Cafe-তে আপনার অর্ডারটি কনফার্ম করা হয়েছে! আপনার পছন্দের খাবারটি দ্রুত তৈরি করা হচ্ছে। সাথে থাকার জন্য ধন্যবাদ! ☕`;
-            } else if (type === 'ready') {
-                msg = `প্রিয় ${name}, আপনার সুস্বাদু খাবার তৈরি এবং আপনার টেবিলে পৌঁছে দেওয়া হয়েছে! এখন গরম গরম উপভোগ করুন। শুভকামনা! 🍔☕`;
+        async function updateOrderStatus(orderId, newStatus) {
+            const order = appData.orders.find(o => o.id === orderId);
+            if (order) {
+                order.status = newStatus;
+                await saveCloudData();
+                renderAdminOrders();
+                updateAdminAnalytics();
+            }
+        }
+
+        async function deleteOrder(orderId) {
+            if (confirm('অর্ডারটি মুছে ফেলতে চান?')) {
+                appData.orders = appData.orders.filter(o => o.id !== orderId);
+                await saveCloudData();
+                renderAdminOrders();
+                updateAdminAnalytics();
+            }
+        }
+
+        function sendSMS(phone, type) {
+            let msg = "";
+            if (type === 'ready') {
+                msg = "প্রিয় গ্রাহক, মুহূর্ত-ক্যাফেতে আপনার অর্ডারকৃত খাবারটি এখন প্রস্তুত করা হচ্ছে। কিছুক্ষণের মধ্যেই পরিবেশন করা হবে। ধন্যবাদ!";
+            } else if (type === 'served') {
+                msg = "প্রিয় গ্রাহক, আপনার খাবারটি টেবিলে পরিবেশন করা হয়েছে। মুহূর্ত-ক্যাফের সাথে সুন্দর সময় উপভোগ করুন!";
             } else if (type === 'paid') {
-                msg = `প্রিয় ${name}, আপনার বিল সঠিকভাবে পরিশোধিত হয়েছে। মুহূর্ত-Cafe-তে আসার জন্য আন্তরিকভাবে ধন্যবাদ, আবার আসবেন! 😊✨`;
+                msg = "প্রিয় গ্রাহক, মুহূর্ত-ক্যাফেতে আপনার খাবারের বিল সফলভাবে পরিশোধিত হয়েছে। আবার আসবেন, শুভকামনা!";
             }
 
-            const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
-            window.open(waUrl, '_blank');
+            window.open(`sms:${phone}?body=${encodeURIComponent(msg)}`);
         }
 
-        async function completeOrder(idx) {
-            const completed = serverData.orders.splice(idx, 1)[0];
-            if (!serverData.history) serverData.history = [];
-            serverData.history.push(completed);
-            await updateCloudData();
-        }
-
-        async function deleteOrder(idx) {
-            if (confirm("অর্ডারটি বাতিল করতে চান?")) {
-                serverData.orders.splice(idx, 1);
-                await updateCloudData();
-            }
-        }
-
-        function renderMenuManagementList(menu) {
-            const container = document.getElementById('existing-menu-list');
-            if (menu.length === 0) return container.innerHTML = `<p style="color:#777; font-size:11px;">কোনো খাবার নেই</p>`;
-            let html = '';
-            menu.forEach((item, index) => {
-                html += `
-                    <div class="edit-item-row">
-                        <span><strong>${item.name}</strong> (৳${item.price})</span>
-                        <button style="background:var(--danger-red); color:white; border:none; padding:2px 6px; border-radius:3px; cursor:pointer;" onclick="deleteMenuItem(${index})">ডিলিট</button>
+        function renderAdminMenuList() {
+            const container = document.getElementById('admin-menu-items-list');
+            container.innerHTML = appData.menu.map(m => `
+                <div class="bg-slate-900 p-3 rounded-2xl border border-slate-800 flex justify-between items-center text-xs shadow-md">
+                    <div class="flex items-center gap-3">
+                        <img src="${m.img}" class="w-12 h-12 object-cover rounded-xl border border-slate-700">
+                        <div>
+                            <p class="font-bold text-slate-100">${m.name}</p>
+                            <p class="text-slate-400 mt-0.5">${m.category} • <span class="text-orange-400 font-semibold">৳${m.price}</span></p>
+                        </div>
                     </div>
-                `;
-            });
-            container.innerHTML = html;
+                    <button onclick="deleteFoodItem(${m.id})" class="text-red-400 hover:text-red-300 font-medium hover:underline p-2">মুছুন</button>
+                </div>
+            `).join('');
         }
 
-        async function addNewFood(e) {
-            e.preventDefault();
-            const btn = document.getElementById('save-food-btn');
-            btn.innerText = "সেভ হচ্ছে...";
-            btn.disabled = true;
+        async function addNewFoodItem() {
+            const name = document.getElementById('add-name').value.trim();
+            const price = parseFloat(document.getElementById('add-price').value);
+            const category = document.getElementById('add-cat').value;
+            const imgUrl = document.getElementById('add-img-url').value.trim();
 
-            const newFood = {
-                id: Date.now(),
-                name: document.getElementById('food-name').value,
-                price: parseFloat(document.getElementById('food-price').value),
-                category: document.getElementById('food-category').value,
-                image: document.getElementById('food-image').value
-            };
-            if (!serverData.menu) serverData.menu = [];
-            serverData.menu.push(newFood);
-            const ok = await updateCloudData();
-            if (ok) {
-                alert("নতুন খাবার মেনুতে সেভ হয়েছে এবং কাস্টমারদের মোবাইলে লাইভ আপডেট হয়ে গেছে!");
-                document.getElementById('menu-form').reset();
-            } else {
-                alert("সেভ করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+            if (!name || !price) {
+                alert('নাম এবং দাম লিখুন!');
+                return;
             }
-            btn.innerText = "+ মেনুতে যুক্ত করুন";
-            btn.disabled = false;
+
+            let img = imgUrl || 'https://via.placeholder.com/150';
+
+            appData.menu.push({ id: Date.now(), name, price, category, img });
+            await saveCloudData();
+            renderMenuGrid();
+            renderAdminMenuList();
+
+            document.getElementById('add-name').value = '';
+            document.getElementById('add-price').value = '';
+            document.getElementById('add-img-url').value = '';
+
+            alert('খাবার সফলভাবে সেভ হয়েছে!');
         }
 
-        async function deleteMenuItem(idx) {
-            if (confirm("এই খাবারটি মেনু থেকে ডিলিট করতে চান?")) {
-                serverData.menu.splice(idx, 1);
-                await updateCloudData();
+        async function deleteFoodItem(id) {
+            if (confirm('আইটেমটি মুছে ফেলতে চান?')) {
+                appData.menu = appData.menu.filter(m => m.id !== id);
+                await saveCloudData();
+                renderMenuGrid();
+                renderAdminMenuList();
             }
         }
 
-        function renderSalesReport() {
-            const history = serverData.history || [];
-            document.getElementById('rep-total-orders').innerText = `${history.length}টি`;
-            const totalSales = history.reduce((sum, ord) => sum + (ord.total || 0), 0);
-            document.getElementById('rep-total-sales').innerText = `৳${totalSales}`;
-
-            const container = document.getElementById('history-container');
-            if (history.length === 0) return container.innerHTML = `<p style="color:#777;">কোনো হিসাব নেই</p>`;
-            let html = '';
-            history.slice().reverse().forEach(h => {
-                html += `<div style="border-bottom:1px solid #eee; padding:4px 0;"><strong>#${h.id} (${h.name} - ${h.table})</strong> - ৳${h.total} <br><span style="color:#666;">${h.items}</span></div>`;
-            });
-            container.innerHTML = html;
+        function loadSettingInputs() {
+            document.getElementById('setting-name').value = appData.siteName;
+            document.getElementById('setting-address').value = appData.address;
+            document.getElementById('setting-tables').value = appData.tables.join(', ');
         }
 
-        async function saveShopSettings(e) {
-            e.preventDefault();
-            serverData.config = {
-                name: document.getElementById('set-shop-name').value,
-                tagline: document.getElementById('set-shop-tagline').value,
-                address: document.getElementById('set-shop-address').value
-            };
-            const ok = await updateCloudData();
-            if (ok) alert("দোকানের নাম ও তথ্য আপডেট হয়েছে!");
-        }
+        async function saveSiteSettings() {
+            appData.siteName = document.getElementById('setting-name').value.trim();
+            appData.address = document.getElementById('setting-address').value.trim();
+            appData.tables = document.getElementById('setting-tables').value.split(',').map(t => t.trim());
 
-        async function updateCloudData() {
-            try {
-                const res = await fetch(BIN_URL, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-                    body: JSON.stringify(serverData)
-                });
-                if (res.ok) { fetchCloudData(); return true; }
-                return false;
-            } catch (e) { return false; }
+            await saveCloudData();
+            updateHeaderAndFooter();
+            alert('সেটিংস সংরক্ষিত হয়েছে!');
         }
-
-        initSite();
     </script>
 </body>
 </html>
