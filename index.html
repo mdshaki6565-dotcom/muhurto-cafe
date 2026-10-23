@@ -22,7 +22,7 @@
                             500: '#f97316',
                             600: '#ea580c',
                             800: '#9a3412',
-                            dark: '#0f172a'
+                            dark: '#1c1917'
                         }
                     },
                     fontFamily: {
@@ -38,9 +38,9 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
 
-    <!-- Customer Header Section -->
+    <!-- Header Section -->
     <header class="bg-gradient-to-r from-amber-700 via-orange-600 to-amber-800 text-white shadow-lg sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-3 space-x-reverse">
@@ -61,19 +61,19 @@
                     <i class="fa-solid fa-cart-shopping text-lg"></i>
                     <span id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-orange-600">0</span>
                 </button>
-                <button onclick="openAdminModal()" class="bg-amber-950/60 hover:bg-black/80 text-xs px-3.5 py-2 rounded-xl font-medium border border-amber-300/30 transition flex items-center gap-1.5 shadow-md">
-                    <i class="fa-solid fa-user-shield text-amber-400"></i> এডমিন প্যানেল
+                <button onclick="openAdminModal()" class="bg-amber-900/40 hover:bg-amber-900/60 text-xs px-3 py-2 rounded-lg font-medium border border-amber-300/30 transition flex items-center gap-1">
+                    <i class="fa-solid fa-user-shield"></i> এডমিন
                 </button>
             </div>
         </div>
     </header>
 
     <!-- Banner Tagline -->
-    <section class="bg-amber-100 border-b border-amber-200 py-2 text-center text-amber-900 font-medium text-sm shadow-inner">
+    <section class="bg-amber-100 border-b border-amber-200 py-2 text-center text-amber-900 font-medium text-sm">
         ✨ প্রতিটি চুমুকে একটুকু মুহূর্ত! ✨
     </section>
 
-    <!-- Main Customer View Container -->
+    <!-- Main Container -->
     <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
 
         <!-- Search & Filter Bar -->
@@ -158,180 +158,149 @@
         </div>
     </div>
 
-    <!-- FULL SCREEN MODERN ADMIN DASHBOARD OVERLAY -->
-    <div id="admin-modal" class="fixed inset-0 bg-slate-950 z-50 hidden flex flex-col overflow-hidden">
-        
-        <!-- Admin Login Overlay Box -->
-        <div id="admin-login-box" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
-            <div class="p-8 text-center space-y-6 max-w-md w-full bg-slate-900 rounded-3xl border border-slate-800 shadow-2xl">
-                <div class="w-20 h-20 bg-orange-600/20 text-orange-500 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner border border-orange-500/30">
-                    <i class="fa-solid fa-user-gear"></i>
-                </div>
-                <div>
-                    <h3 class="text-2xl font-bold text-white tracking-wide">এডমিন ড্যাশবোর্ড</h3>
-                    <p class="text-xs text-slate-400 mt-1">পাসওয়ার্ড দিয়ে সিস্টেমে প্রবেশ করুন</p>
-                </div>
-                <input type="password" id="admin-pin" placeholder="••••••••" class="w-full p-4 bg-slate-950 border border-slate-800 text-white rounded-2xl text-center text-2xl tracking-widest focus:outline-none focus:border-orange-500 transition shadow-inner">
-                <button onclick="checkAdminPin()" class="w-full bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white py-3.5 rounded-2xl font-bold transition shadow-lg text-sm">প্রবেশ করুন</button>
-                <button onclick="closeAdminModal()" class="text-xs text-slate-500 hover:text-slate-300 transition">বাতিল করে ওয়েবসাইটে ফিরে যান</button>
-            </div>
-        </div>
-
-        <!-- Fullscreen Admin Control Center -->
-        <div id="admin-dashboard" class="hidden flex flex-col md:flex-row h-full w-full bg-slate-950 text-slate-100 overflow-hidden">
+    <!-- Admin Panel Modal -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-2 md:p-4 backdrop-blur-sm">
+        <div class="bg-gray-900 text-gray-100 w-full max-w-5xl rounded-2xl max-h-[95vh] flex flex-col shadow-2xl border border-gray-800 overflow-hidden">
             
-            <!-- Left Sidebar Navigation -->
-            <aside class="w-full md:w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0">
+            <!-- Admin Login Box -->
+            <div id="admin-login-box" class="p-8 text-center space-y-5 max-w-md mx-auto my-auto w-full bg-gray-800/80 rounded-2xl border border-gray-700">
+                <div class="w-16 h-16 bg-orange-600/20 text-orange-500 rounded-full flex items-center justify-center mx-auto text-3xl">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
                 <div>
-                    <!-- Sidebar Header -->
-                    <div class="p-5 border-b border-slate-800 flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="bg-orange-600 text-white p-2.5 rounded-xl shadow-lg text-lg font-bold">
-                                ☕
-                            </div>
-                            <div>
-                                <h2 class="font-bold text-sm text-white leading-tight">মুহূর্ত-Cafe POS</h2>
-                                <p class="text-[10px] text-green-400 flex items-center gap-1 mt-0.5">
-                                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> সিংক একটিভ
-                                </p>
-                            </div>
+                    <h3 class="text-xl font-bold text-white">এডমিন সিংক ড্যাশবোর্ড</h3>
+                    <p class="text-xs text-gray-400 mt-1">পাসওয়ার্ড দিয়ে প্যানেলে প্রবেশ করুন</p>
+                </div>
+                <input type="password" id="admin-pin" placeholder="••••••••" class="w-full p-3.5 bg-gray-900 border border-gray-700 text-white rounded-xl text-center text-xl tracking-widest focus:outline-none focus:border-orange-500">
+                <button onclick="checkAdminPin()" class="w-full bg-gradient-to-r from-orange-600 to-amber-600 text-white py-3 rounded-xl font-bold hover:opacity-90 transition shadow-lg">প্রবেশ করুন</button>
+                <button onclick="closeAdminModal()" class="text-xs text-gray-400 hover:text-white">বাতিল করুন</button>
+            </div>
+
+            <!-- Admin Dashboard -->
+            <div id="admin-dashboard" class="hidden flex flex-col h-full overflow-hidden">
+                <!-- Top Navbar -->
+                <div class="p-4 bg-gray-950 text-white flex justify-between items-center border-b border-gray-800">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-orange-600 text-white p-2 rounded-lg text-sm">
+                            <i class="fa-solid fa-sliders"></i>
+                        </div>
+                        <div>
+                            <span class="font-bold text-sm block">মুহূর্ত-Cafe এডমিন কন্ট্রোল</span>
+                            <span class="text-[10px] text-green-400 flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> ক্লাউড সিংক একটিভ
+                            </span>
                         </div>
                     </div>
-
-                    <!-- Sidebar Links -->
-                    <nav class="p-3 space-y-1.5 text-xs font-medium">
-                        <button onclick="switchAdminTab('orders')" id="tab-btn-orders" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-600 text-white font-bold transition shadow-md">
-                            <i class="fa-solid fa-bell text-sm"></i> লাইভ অর্ডারসমূহ
-                        </button>
-                        <button onclick="switchAdminTab('menu')" id="tab-btn-menu" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
-                            <i class="fa-solid fa-utensils text-sm"></i> খাবার ম্যানুয়াল
-                        </button>
-                        <button onclick="switchAdminTab('settings')" id="tab-btn-settings" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
-                            <i class="fa-solid fa-gear text-sm"></i> ক্যাফে সেটিংস
-                        </button>
-                    </nav>
-                </div>
-
-                <!-- Sidebar Footer Exit Button -->
-                <div class="p-4 border-t border-slate-800">
-                    <button onclick="closeAdminModal()" class="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 py-2.5 rounded-xl text-xs font-semibold transition border border-slate-700">
-                        <i class="fa-solid fa-right-from-bracket"></i> সাইটে ফিরে যান
+                    <button onclick="closeAdminModal()" class="bg-gray-800 hover:bg-gray-700 p-2 rounded-lg text-gray-300 hover:text-white transition">
+                        <i class="fa-solid fa-xmark text-lg"></i>
                     </button>
                 </div>
-            </aside>
 
-            <!-- Main Content Area -->
-            <div class="flex-grow flex flex-col h-full overflow-hidden bg-slate-950">
-                
-                <!-- Top Header Info Bar -->
-                <header class="p-4 bg-slate-900/60 border-b border-slate-800 flex justify-between items-center">
-                    <h3 id="admin-panel-title" class="font-bold text-base text-white flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-orange-500"></i> ড্যাশবোর্ড ওভারভিউ
-                    </h3>
-                    <button onclick="loadCloudData()" class="text-xs text-orange-400 bg-orange-950/60 hover:bg-orange-900/60 px-3.5 py-2 rounded-xl border border-orange-800/60 transition flex items-center gap-1.5 shadow-sm">
-                        <i class="fa-solid fa-rotate"></i> লাইভ ডাটা সিংক
-                    </button>
-                </header>
-
-                <!-- Modern Analytics Summary Cards -->
-                <div class="grid grid-cols-3 gap-3 p-4 bg-slate-900/30 border-b border-slate-800/80 text-xs">
-                    <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 shadow-md">
-                        <p class="text-slate-400 font-medium">মোট অর্ডার</p>
-                        <p class="text-2xl font-black text-orange-400 mt-1" id="stat-total-orders">0</p>
+                <!-- Admin Analytics Summary -->
+                <div class="grid grid-cols-3 gap-2 p-3 bg-gray-900 border-b border-gray-800 text-xs">
+                    <div class="bg-gray-800/80 p-2.5 rounded-xl border border-gray-700/50">
+                        <p class="text-gray-400">মোট অর্ডার</p>
+                        <p class="text-lg font-bold text-orange-400" id="stat-total-orders">0</p>
                     </div>
-                    <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 shadow-md">
-                        <p class="text-slate-400 font-medium">মোট বিক্রি</p>
-                        <p class="text-2xl font-black text-emerald-400 mt-1" id="stat-total-sales">৳0</p>
+                    <div class="bg-gray-800/80 p-2.5 rounded-xl border border-gray-700/50">
+                        <p class="text-gray-400">মোট বিক্রি</p>
+                        <p class="text-lg font-bold text-green-400" id="stat-total-sales">৳0</p>
                     </div>
-                    <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 shadow-md">
-                        <p class="text-slate-400 font-medium">পেন্ডিং অর্ডার</p>
-                        <p class="text-2xl font-black text-amber-400 mt-1" id="stat-pending-orders">0</p>
+                    <div class="bg-gray-800/80 p-2.5 rounded-xl border border-gray-700/50">
+                        <p class="text-gray-400">পেন্ডিং অর্ডার</p>
+                        <p class="text-lg font-bold text-amber-400" id="stat-pending-orders">0</p>
                     </div>
                 </div>
 
-                <!-- Admin Tab Scrollable Content -->
-                <div class="p-4 md:p-6 overflow-y-auto flex-grow text-slate-200 space-y-6">
+                <!-- Admin Tabs -->
+                <div class="flex border-b border-gray-800 bg-gray-900 text-xs font-semibold overflow-x-auto">
+                    <button onclick="switchAdminTab('orders')" id="tab-btn-orders" class="px-5 py-3 border-b-2 border-orange-500 text-orange-500 font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-bell"></i> লাইভ অর্ডারসমূহ
+                    </button>
+                    <button onclick="switchAdminTab('menu')" id="tab-btn-menu" class="px-5 py-3 text-gray-400 flex items-center gap-2">
+                        <i class="fa-solid fa-utensils"></i> খাবার ম্যানুয়াল
+                    </button>
+                    <button onclick="switchAdminTab('settings')" id="tab-btn-settings" class="px-5 py-3 text-gray-400 flex items-center gap-2">
+                        <i class="fa-solid fa-gear"></i> ক্যাফে সেটিংস
+                    </button>
+                </div>
+
+                <!-- Admin Tab Contents -->
+                <div class="p-4 overflow-y-auto flex-grow bg-gray-950 text-gray-200">
 
                     <!-- TAB 1: ORDERS -->
                     <div id="admin-tab-orders" class="space-y-4">
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-800">
-                            <span class="font-bold text-sm text-slate-200 flex items-center gap-2">
-                                <i class="fa-solid fa-filter text-orange-500"></i> ফিল্টার কাস্টমাইজেশন
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 bg-gray-900 p-3 rounded-xl border border-gray-800">
+                            <span class="font-bold text-sm text-gray-200 flex items-center gap-2">
+                                <i class="fa-solid fa-list-check text-orange-500"></i> অর্ডার তালিকা কাস্টমাইজেশন
                             </span>
-                            <select id="order-filter-status" onchange="renderAdminOrders()" class="bg-slate-950 border border-slate-700 text-xs text-slate-200 rounded-xl p-2.5 focus:outline-none w-full sm:w-auto">
-                                <option value="all">সকল অর্ডার</option>
-                                <option value="নতুন অর্ডার">নতুন অর্ডার</option>
-                                <option value="রেডি হচ্ছে">রেডি হচ্ছে</option>
-                                <option value="পরিবেশন সম্পন্ন">পরিবেশন সম্পন্ন</option>
-                                <option value="বিল পরিশোধিত">বিল পরিশোধিত</option>
-                            </select>
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <select id="order-filter-status" onchange="renderAdminOrders()" class="bg-gray-800 border border-gray-700 text-xs text-gray-200 rounded-lg p-2 focus:outline-none">
+                                    <option value="all">সকল অর্ডার</option>
+                                    <option value="নতুন অর্ডার">নতুন অর্ডার</option>
+                                    <option value="রেডি হচ্ছে">রেডি হচ্ছে</option>
+                                    <option value="পরিবেশন সম্পন্ন">পরিবেশন সম্পন্ন</option>
+                                    <option value="বিল পরিশোধিত">বিল পরিশোধিত</option>
+                                </select>
+                                <button onclick="loadCloudData()" class="text-xs text-orange-400 bg-orange-950/50 hover:bg-orange-900/50 px-3 py-2 rounded-lg border border-orange-800/60 transition flex items-center gap-1">
+                                    <i class="fa-solid fa-rotate"></i> সিংক
+                                </button>
+                            </div>
                         </div>
 
-                        <div id="admin-orders-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div id="admin-orders-list" class="space-y-3">
                             <!-- Orders dynamically rendered -->
                         </div>
                     </div>
 
                     <!-- TAB 2: MENU MANAGEMENT -->
-                    <div id="admin-tab-menu" class="hidden space-y-6">
-                        <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4 shadow-xl">
+                    <div id="admin-tab-menu" class="hidden space-y-4">
+                        <div class="bg-gray-900 p-4 rounded-xl border border-gray-800 space-y-3 shadow-sm">
                             <h4 class="font-bold text-orange-400 text-sm flex items-center gap-2">
                                 <i class="fa-solid fa-plus-circle"></i> নতুন খাবার যোগ করুন
                             </h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                                <div>
-                                    <label class="block mb-1 text-slate-400">খাবারের নাম:</label>
-                                    <input type="text" id="add-name" placeholder="যেমন: স্পেশাল কফি" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:border-orange-500 focus:outline-none">
-                                </div>
-                                <div>
-                                    <label class="block mb-1 text-slate-400">দাম (৳):</label>
-                                    <input type="number" id="add-price" placeholder="যেমন: ৩০" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:border-orange-500 focus:outline-none">
-                                </div>
-                                <div>
-                                    <label class="block mb-1 text-slate-400">ক্যাটাগরি:</label>
-                                    <select id="add-cat" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:border-orange-500 focus:outline-none">
-                                        <option value="ফাস্টফুড">ফাস্টফুড</option>
-                                        <option value="ফুচকা ও চাট">ফুচকা ও চাট</option>
-                                        <option value="ফ্রেশ জুস">ফ্রেশ জুস</option>
-                                        <option value="হালকা খাবার">হালকা খাবার</option>
-                                        <option value="কম্বো অফার">কম্বো অফার</option>
-                                        <option value="চা ও গরম পানীয়">চা ও গরম পানীয়</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block mb-1 text-slate-400">ইমেজ লিংক (ImgBB Photo Link):</label>
-                                    <input type="text" id="add-img-url" placeholder="https://i.ibb.co/..." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:border-orange-500 focus:outline-none">
-                                </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                                <input type="text" id="add-name" placeholder="খাবারের নাম" class="p-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white">
+                                <input type="number" id="add-price" placeholder="দাম (৳)" class="p-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white">
+                                <select id="add-cat" class="p-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white">
+                                    <option value="ফাস্টফুড">ফাস্টফুড</option>
+                                    <option value="ফুচকা ও চাট">ফুচকা ও চাট</option>
+                                    <option value="ফ্রেশ জুস">ফ্রেশ জুস</option>
+                                    <option value="হালকা খাবার">হালকা খাবার</option>
+                                    <option value="কম্বো অফার">কম্বো অফার</option>
+                                    <option value="চা ও গরম পানীয়">চা ও গরম পানীয়</option>
+                                </select>
+                                <input type="text" id="add-img-url" placeholder="ইমেজ লিংক (ImgBB Link Paste করুন)" class="p-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white">
                             </div>
-                            <button onclick="addNewFoodItem()" class="bg-gradient-to-r from-orange-600 to-amber-600 text-white text-xs px-6 py-3 rounded-xl font-bold hover:opacity-90 transition shadow-lg flex items-center gap-2">
-                                <i class="fa-solid fa-floppy-disk"></i> খাবার সেভ করুন
+                            <button onclick="addNewFoodItem()" class="bg-orange-600 text-white text-xs px-4 py-2.5 rounded-lg font-bold hover:bg-orange-700 transition">
+                                + খাবার সেভ করুন
                             </button>
                         </div>
 
-                        <div id="admin-menu-items-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div id="admin-menu-items-list" class="space-y-2">
                             <!-- Existing Food Items -->
                         </div>
                     </div>
 
                     <!-- TAB 3: SETTINGS -->
                     <div id="admin-tab-settings" class="hidden space-y-4">
-                        <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4 text-xs shadow-xl max-w-2xl">
+                        <div class="bg-gray-900 p-4 rounded-xl border border-gray-800 space-y-3 text-xs">
                             <h4 class="font-bold text-orange-400 text-sm flex items-center gap-2">
                                 <i class="fa-solid fa-sliders"></i> ক্যাফে তথ্য কাস্টমাইজেশন
                             </h4>
                             <div>
-                                <label class="block mb-1 text-slate-400 font-semibold">ক্যাফের নাম:</label>
-                                <input type="text" id="setting-name" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:border-orange-500 focus:outline-none">
+                                <label class="block mb-1 text-gray-400 font-semibold">ক্যাফের নাম:</label>
+                                <input type="text" id="setting-name" class="w-full p-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white">
                             </div>
                             <div>
-                                <label class="block mb-1 text-slate-400 font-semibold">ঠিকানা:</label>
-                                <input type="text" id="setting-address" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:border-orange-500 focus:outline-none">
+                                <label class="block mb-1 text-gray-400 font-semibold">ঠিকানা:</label>
+                                <input type="text" id="setting-address" class="w-full p-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white">
                             </div>
                             <div>
-                                <label class="block mb-1 text-slate-400 font-semibold">টেবিল তালিকা (কমা দিয়ে লিখুন):</label>
-                                <input type="text" id="setting-tables" placeholder="টেবিল ১, টেবিল ২, টেবিল ৩" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:border-orange-500 focus:outline-none">
+                                <label class="block mb-1 text-gray-400 font-semibold">টেবিল তালিকা (কমা দিয়ে লিখুন):</label>
+                                <input type="text" id="setting-tables" placeholder="টেবিল ১, টেবিল ২, টেবিল ৩" class="w-full p-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white">
                             </div>
-                            <button onclick="saveSiteSettings()" class="bg-orange-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-700 transition shadow-md">
+                            <button onclick="saveSiteSettings()" class="bg-orange-600 text-white px-5 py-2.5 rounded-lg font-bold hover:bg-orange-700 transition">
                                 সেটিংস আপডেট করুন
                             </button>
                         </div>
@@ -583,11 +552,7 @@
             document.getElementById('admin-modal').classList.remove('hidden');
             document.getElementById('admin-pin').value = '';
         }
-        function closeAdminModal() { 
-            document.getElementById('admin-modal').classList.add('hidden');
-            document.getElementById('admin-dashboard').classList.add('hidden');
-            document.getElementById('admin-login-box').classList.remove('hidden');
-        }
+        function closeAdminModal() { document.getElementById('admin-modal').classList.add('hidden'); }
 
         function checkAdminPin() {
             const pin = document.getElementById('admin-pin').value;
@@ -616,20 +581,13 @@
         function switchAdminTab(tab) {
             ['orders', 'menu', 'settings'].forEach(t => {
                 document.getElementById(`admin-tab-${t}`).classList.add('hidden');
-                document.getElementById(`tab-btn-${t}`).classList.remove('bg-orange-600', 'text-white', 'font-bold', 'shadow-md');
-                document.getElementById(`tab-btn-${t}`).classList.add('text-slate-400');
+                document.getElementById(`tab-btn-${t}`).classList.remove('border-b-2', 'border-orange-500', 'text-orange-500', 'font-bold');
+                document.getElementById(`tab-btn-${t}`).classList.add('text-gray-400');
             });
 
             document.getElementById(`admin-tab-${tab}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tab}`).classList.add('bg-orange-600', 'text-white', 'font-bold', 'shadow-md');
-            document.getElementById(`tab-btn-${tab}`).classList.remove('text-slate-400');
-
-            const titles = {
-                orders: '<i class="fa-solid fa-bell text-orange-500"></i> লাইভ অর্ডার ম্যানেজমেন্ট',
-                menu: '<i class="fa-solid fa-utensils text-orange-500"></i> ডিজিটাল মেনু কাস্টমাইজেশন',
-                settings: '<i class="fa-solid fa-gear text-orange-500"></i> ক্যাফে জেনারেল সেটিংস'
-            };
-            document.getElementById('admin-panel-title').innerHTML = titles[tab];
+            document.getElementById(`tab-btn-${tab}`).classList.add('border-b-2', 'border-orange-500', 'text-orange-500', 'font-bold');
+            document.getElementById(`tab-btn-${tab}`).classList.remove('text-gray-400');
         }
 
         function renderAdminOrders() {
@@ -642,41 +600,41 @@
             }
 
             if (filteredOrders.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center text-slate-500 py-10 text-xs">কোনো অর্ডার পাওয়া যায়নি</div>`;
+                container.innerHTML = `<p class="text-center text-gray-500 py-6 text-xs">কোনো অর্ডার পাওয়া যায়নি</p>`;
                 return;
             }
 
             container.innerHTML = filteredOrders.map(o => `
-                <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3 text-xs shadow-lg">
-                    <div class="flex justify-between items-start border-b border-slate-800 pb-3">
+                <div class="bg-gray-900 p-3.5 rounded-xl border border-gray-800 space-y-3 text-xs shadow-md">
+                    <div class="flex justify-between items-start border-b border-gray-800 pb-2.5">
                         <div>
-                            <span class="font-bold text-slate-100 text-sm">${o.name} <span class="text-orange-400 font-normal">(${o.table})</span></span>
-                            <p class="text-slate-400 mt-0.5"><i class="fa-solid fa-phone text-[10px]"></i> ${o.phone} • ${o.time}</p>
+                            <span class="font-bold text-gray-100 text-sm">${o.name} <span class="text-orange-400 font-normal">(${o.table})</span></span>
+                            <p class="text-gray-400 mt-0.5"><i class="fa-solid fa-phone text-[10px]"></i> ${o.phone} • ${o.time}</p>
                         </div>
                         <div class="flex flex-col items-end gap-1">
-                            <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold ${getStatusBadgeClass(o.status)}">${o.status}</span>
-                            <button onclick="deleteOrder(${o.id})" class="text-red-400 hover:text-red-300 text-[10px] mt-1"><i class="fa-solid fa-trash-can"></i> ডিলিট</button>
+                            <span class="px-2.5 py-1 rounded-md text-[10px] font-bold ${getStatusBadgeClass(o.status)}">${o.status}</span>
+                            <button onclick="deleteOrder(${o.id})" class="text-red-400 hover:text-red-300 text-[10px]"><i class="fa-solid fa-trash-can"></i> ডিলিট</button>
                         </div>
                     </div>
 
-                    <div class="space-y-1 text-slate-300 bg-slate-950 p-2.5 rounded-xl border border-slate-800/80">
-                        ${o.items.map(i => `<div class="flex justify-between"><span>• ${i.name} x ${i.qty}</span> <span class="font-semibold text-slate-400">৳${i.price * i.qty}</span></div>`).join('')}
+                    <div class="space-y-1 text-gray-300 bg-gray-950/50 p-2 rounded-lg border border-gray-800/80">
+                        ${o.items.map(i => `<div class="flex justify-between"><span>• ${i.name} x ${i.qty}</span> <span class="font-semibold text-gray-400">৳${i.price * i.qty}</span></div>`).join('')}
                     </div>
 
-                    <div class="pt-2 border-t border-slate-800 flex flex-col justify-between items-start gap-2 font-bold">
+                    <div class="pt-2 border-t border-gray-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 font-bold">
                         <span class="text-amber-400 text-sm">মোট বিল: ৳${o.total}</span>
                         
-                        <div class="flex flex-wrap items-center gap-1.5 w-full">
-                            <select onchange="updateOrderStatus(${o.id}, this.value)" class="bg-slate-950 border border-slate-700 text-[11px] text-slate-200 rounded-lg px-2 py-1 focus:outline-none flex-grow">
+                        <div class="flex flex-wrap items-center gap-1.5 w-full md:w-auto">
+                            <select onchange="updateOrderStatus(${o.id}, this.value)" class="bg-gray-800 border border-gray-700 text-[11px] text-gray-200 rounded px-2 py-1 focus:outline-none">
                                 <option value="নতুন অর্ডার" ${o.status === 'নতুন অর্ডার' ? 'selected' : ''}>নতুন অর্ডার</option>
                                 <option value="রেডি হচ্ছে" ${o.status === 'রেডি হচ্ছে' ? 'selected' : ''}>রেডি হচ্ছে</option>
                                 <option value="পরিবেশন সম্পন্ন" ${o.status === 'পরিবেশন সম্পন্ন' ? 'selected' : ''}>পরিবেশন সম্পন্ন</option>
                                 <option value="বিল পরিশোধিত" ${o.status === 'বিল পরিশোধিত' ? 'selected' : ''}>বিল পরিশোধিত</option>
                             </select>
 
-                            <button onclick="sendSMS('${o.phone}', 'ready')" class="bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/30 px-2 py-1 rounded-lg text-[10px] transition">রেডি SMS</button>
-                            <button onclick="sendSMS('${o.phone}', 'served')" class="bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 px-2 py-1 rounded-lg text-[10px] transition">পরিবেশন SMS</button>
-                            <button onclick="sendSMS('${o.phone}', 'paid')" class="bg-purple-600/20 hover:bg-purple-600 text-purple-400 hover:text-white border border-purple-500/30 px-2 py-1 rounded-lg text-[10px] transition">বিল SMS</button>
+                            <button onclick="sendSMS('${o.phone}', 'ready')" class="bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/30 px-2 py-1 rounded text-[10px] transition">রেডি SMS</button>
+                            <button onclick="sendSMS('${o.phone}', 'served')" class="bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white border border-emerald-500/30 px-2 py-1 rounded text-[10px] transition">পরিবেশন SMS</button>
+                            <button onclick="sendSMS('${o.phone}', 'paid')" class="bg-purple-600/20 hover:bg-purple-600 text-purple-400 hover:text-white border border-purple-500/30 px-2 py-1 rounded text-[10px] transition">বিল SMS</button>
                         </div>
                     </div>
                 </div>
@@ -689,7 +647,7 @@
                 case 'রেডি হচ্ছে': return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
                 case 'পরিবেশন সম্পন্ন': return 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
                 case 'বিল পরিশোধিত': return 'bg-purple-500/20 text-purple-400 border border-purple-500/30';
-                default: return 'bg-slate-800 text-slate-300';
+                default: return 'bg-gray-800 text-gray-300';
             }
         }
 
@@ -728,19 +686,20 @@
         function renderAdminMenuList() {
             const container = document.getElementById('admin-menu-items-list');
             container.innerHTML = appData.menu.map(m => `
-                <div class="bg-slate-900 p-3 rounded-2xl border border-slate-800 flex justify-between items-center text-xs shadow-md">
-                    <div class="flex items-center gap-3">
-                        <img src="${m.img}" class="w-12 h-12 object-cover rounded-xl border border-slate-700">
+                <div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800 flex justify-between items-center text-xs">
+                    <div class="flex items-center gap-2">
+                        <img src="${m.img}" class="w-10 h-10 object-cover rounded-lg border border-gray-700">
                         <div>
-                            <p class="font-bold text-slate-100">${m.name}</p>
-                            <p class="text-slate-400 mt-0.5">${m.category} • <span class="text-orange-400 font-semibold">৳${m.price}</span></p>
+                            <p class="font-bold text-gray-200">${m.name}</p>
+                            <p class="text-gray-400">${m.category} • <span class="text-orange-400">৳${m.price}</span></p>
                         </div>
                     </div>
-                    <button onclick="deleteFoodItem(${m.id})" class="text-red-400 hover:text-red-300 font-medium hover:underline p-2">মুছুন</button>
+                    <button onclick="deleteFoodItem(${m.id})" class="text-red-400 hover:text-red-300 hover:underline">মুছুন</button>
                 </div>
             `).join('');
         }
 
+        // Extremely fast URL-based Save (Unlimited items without memory issues)
         async function addNewFoodItem() {
             const name = document.getElementById('add-name').value.trim();
             const price = parseFloat(document.getElementById('add-price').value);
